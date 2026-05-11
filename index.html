@@ -3,29 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>名校入學題庫測試系統 (DGJS & CKY 專修版)</title>
+    <title>名校入學題庫測試系統</title>
     <style>
         :root { --primary: #4a90e2; --secondary: #f39c12; --success: #27ae60; --danger: #e74c3c; }
         body { font-family: 'PingFang HK', 'Microsoft JhengHei', sans-serif; background: #f5f7fa; margin: 0; display: flex; justify-content: center; padding: 20px; }
-        #app { background: white; width: 100%; max-width: 700px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); padding: 30px; overflow: hidden; }
-        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px; }
-        .progress-bar { height: 8px; background: #eee; border-radius: 4px; margin-bottom: 20px; }
-        #progress-inner { height: 100%; background: var(--primary); width: 0%; border-radius: 4px; transition: width 0.3s; }
-        .cat-tag { background: #e1f5fe; color: #01579b; padding: 4px 12px; border-radius: 20px; font-size: 0.9em; font-weight: bold; }
-        #q-text { font-size: 1.3em; color: #2c3e50; line-height: 1.6; margin-bottom: 25px; min-height: 80px; }
-        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .option-btn { padding: 15px; border: 2px solid #eee; border-radius: 12px; background: white; cursor: pointer; transition: all 0.2s; font-size: 1.1em; color: #444; }
-        .option-btn:hover { border-color: var(--primary); background: #f0f7ff; }
-        .option-btn.selected { border-color: var(--primary); background: var(--primary); color: white; }
-        .control-panel { margin-top: 30px; display: flex; flex-direction: column; align-items: center; }
-        .btn-main { padding: 12px 40px; border: none; border-radius: 30px; font-size: 1.1em; cursor: pointer; transition: transform 0.2s; }
-        .btn-main:active { transform: scale(0.95); }
-        #feedback-area { margin-top: 20px; padding: 20px; border-radius: 12px; display: none; width: 100%; box-sizing: border-box; }
-        .correct-box { background: #e8f5e9; border: 1px solid var(--success); color: #2e7d32; }
-        .wrong-box { background: #ffebee; border: 1px solid var(--danger); color: #c62828; }
+        #app { background: white; width: 100%; max-width: 700px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); padding: 30px; }
         .start-screen { text-align: center; padding: 40px 0; }
-        .start-screen h1 { color: #2c3e50; margin-bottom: 20px; }
-        .start-screen p { color: #7f8c8d; margin-bottom: 30px; }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px; }
+        .progress-bar { height: 8px; background: #eee; border-radius: 4px; margin-bottom: 20px; overflow: hidden; }
+        #progress-inner { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s; }
+        .question-text { font-size: 1.3em; font-weight: bold; color: #2c3e50; margin-bottom: 25px; line-height: 1.5; }
+        .options-grid { display: grid; gap: 12px; }
+        .option { padding: 15px 20px; border: 2px solid #e0e6ed; border-radius: 12px; cursor: pointer; transition: all 0.2s; font-size: 1.1em; }
+        .option:hover { background: #f8fbff; border-color: var(--primary); }
+        .option.selected { background: #eef5ff; border-color: var(--primary); color: var(--primary); font-weight: bold; }
+        .btn-main { width: 100%; padding: 15px; border: none; border-radius: 12px; font-size: 1.1em; font-weight: bold; cursor: pointer; transition: opacity 0.2s; margin-top: 20px; }
+        .btn-main:disabled { opacity: 0.5; cursor: not-allowed; }
+        .correct-box { background: #e8f5e9; border: 1px solid #c8e6c9; color: #2e7d32; padding: 20px; border-radius: 12px; }
+        .wrong-box { background: #ffebee; border: 1px solid #ffcdd2; color: #c62828; padding: 20px; border-radius: 12px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; text-align: left; }
+        th, td { padding: 12px; border-bottom: 1px solid #eee; }
+        th { background: #f8f9fa; }
     </style>
 </head>
 <body>
@@ -39,26 +37,30 @@
 
     <div id="quiz-screen" style="display: none;">
         <div class="header">
-            <span id="current-pos" style="font-weight: bold; color: #7f8c8d;">題目 1/20</span>
-            <span id="cat-display" class="cat-tag">類別</span>
+            <div id="q-count" style="font-weight: bold; color: var(--primary);">題目 1 / 20</div>
+            <div id="q-cat" style="background: #eef5ff; padding: 5px 15px; border-radius: 15px; font-size: 0.85em;">類別</div>
         </div>
-        <div class="progress-bar"><div id="progress-inner"></div></div>
-        <div id="q-text">載入中...</div>
-        <div id="options-box" class="options-grid"></div>
+        <div class="progress-bar">
+            <div id="progress-inner"></div>
+        </div>
+        <div id="q-text" class="question-text">載入中...</div>
+        <div id="options-area" class="options-grid"></div>
         
-        <div class="control-panel">
-            <button id="confirm-btn" class="btn-main" style="background: var(--secondary); color: white;" onclick="handleSubmit()">確認答案 (Confirm)</button>
-            <div id="feedback-area">
-                <div id="res-msg" style="margin-bottom: 10px; font-size: 1.2em;"></div>
-                <div id="res-note" style="font-size: 0.95em; line-height: 1.5;"></div>
-                <button class="btn-main" style="background: var(--primary); color: white; margin-top: 20px; width: 100%;" onclick="goNext()">下一題 (Next)</button>
+        <button id="confirm-btn" class="btn-main" style="background: var(--primary); color: white;" onclick="handleSubmit()" disabled>確認答案</button>
+
+        <div id="feedback-area" style="display: none; margin-top: 20px;">
+            <div id="res-box">
+                <div id="res-msg"></div>
+                <div id="res-note" style="margin-top: 10px; font-size: 0.9em; color: #666;"></div>
             </div>
+            <button class="btn-main" style="background: var(--success); color: white;" onclick="goNext()">下一題</button>
         </div>
     </div>
+
+    <div id="result-screen" style="display: none;"></div>
 </div>
 
 <script>
-    // 完整題庫數據 (500+ 題精華整合)
     const questionBank = [
 // --- 數理邏輯強化 (針對 TSL 風格) ---
     { cat: "數學", q: "小明排隊，從前面數起他是第 4 個，從後面數起他也是第 4 個，請問一共有多少人在排隊？", opt: ["7 人", "8 人", "9 人", "6 人"], ans: 0, note: "重疊邏輯題。小明被數了兩次，所以是 4 + 4 - 1 = 7。", tips: "這是名校最經典的排隊題，測試小朋友是否具備空間重疊概念。" },
@@ -255,6 +257,185 @@
     { cat: "中文", q: "我想寫一(  )文章。", opt: ["個", "條", "篇", "枝"], ans: 2, note: "書面作品用「篇」。", tips: "文學量詞。" },
     { cat: "中文", q: "我們全家拍了一(  )合照。", opt: ["張", "個", "幅", "面"], ans: 0, note: "平面紙質品用「張」。", tips: "生活照片量詞。" },
 
+// --- 類別 5：認讀專項 (字詞與圖像配對 20題) ---
+{ cat: "中文", q: "請認讀字詞並選出對應圖片：【大象】", opt: ["🦒", "🐘", "🦁", "🦓"], ans: 1, note: "認讀字詞「大象」。", tips: "測試基礎動物名詞認讀。" },
+{ cat: "中文", q: "請認讀字詞並選出對應圖片：【草莓】", opt: ["🍎", "🍌", "🍓", "🍒"], ans: 2, note: "認讀字詞「草莓」。", tips: "測試水果名詞認讀。" },
+{ cat: "中文", q: "請認讀字詞並選出對應圖片：【飛機】", opt: ["🚀", "✈️", "🚢", "🚁"], ans: 1, note: "認讀字詞「飛機」。", tips: "測試交通工具認讀。" },
+{ cat: "中文", q: "請認讀字詞並選出對應圖片：【太陽】", opt: ["🌙", "☁️", "☀️", "⭐"], ans: 2, note: "認讀字詞「太陽」。", tips: "測試自然景觀認讀。" },
+{ cat: "中文", q: "請認讀字詞並選出對應圖片：【螃蟹】", opt: ["🐟", "🐙", "🦀", "🐢"], ans: 2, note: "認讀字詞「螃蟹」。", tips: "測試海洋生物認讀。" },
+{ cat: "中文", q: "請認讀字詞並選出對應圖片：【手錶】", opt: ["👓", "⌚", "📱", "📷"], ans: 1, note: "認讀字詞「手錶」。", tips: "測試生活用品認讀。" },
+{ cat: "中文", q: "請認讀字詞並選出對應圖片：【足球】", opt: ["🏀", "🎾", "⚽", "🏐"], ans: 2, note: "認讀字詞「足球」。", tips: "測試運動器材認讀。" },
+{ cat: "中文", q: "請認讀字詞並選出對應圖片：【雨傘】", opt: ["☂️", "🎒", "👒", "🧥"], ans: 0, note: "認讀字詞「雨傘」。", tips: "測試日常用品認讀。" },
+{ cat: "中文", q: "請認讀字詞並選出對應圖片：【自行車】", opt: ["🚗", "🚲", "🛵", "🚌"], ans: 1, note: "認讀字詞「自行車」。", tips: "測試交通工具辨識。" },
+{ cat: "中文", q: "請認讀字詞並選出對應圖片：【漢堡】", opt: ["🍕", "🍟", "🍔", "🥪"], ans: 2, note: "認讀字詞「漢堡」。", tips: "測試食物名詞認讀。" },
+{ cat: "中文", q: "請認讀字詞並選出對應圖片：【蝴蝶】", opt: ["🐝", "🦋", "🐞", "🐜"], ans: 1, note: "認讀字詞「蝴蝶」。", tips: "測試昆蟲名詞認讀。" },
+{ cat: "中文", q: "請認讀字詞並選出對應圖片：【鋼琴】", opt: ["🎸", "🎻", "🎹", "🎺"], ans: 2, note: "認讀字詞「鋼琴」。", tips: "測試樂器名詞認讀。" },
+{ cat: "中文", q: "請認讀字詞並選出對應圖片：【西瓜】", opt: ["🍍", "🍉", "🍑", "🍐"], ans: 1, note: "認讀字詞「西瓜」。", tips: "測試水果名詞認讀。" },
+{ cat: "中文", q: "請認讀字詞並選出對應圖片：【企鵝】", opt: ["🦆", "🦉", "🐧", "🦅"], ans: 2, note: "認讀字詞「企鵝」。", tips: "測試極地動物認讀。" },
+{ cat: "中文", q: "請認讀字詞並選出對應圖片：【牙刷】", opt: ["🧼", "🪥", "🛀", "🧴"], ans: 1, note: "認讀字詞「牙刷」。", tips: "測試衛生用品認讀。" },
+{ cat: "中文", q: "請認讀字詞並選出對應圖片：【彩虹】", opt: ["⚡", "🌈", "❄️", "🔥"], ans: 1, note: "認讀字詞「彩虹」。", tips: "測試自然現象認讀。" },
+{ cat: "中文", q: "請認讀字詞並選出對應圖片：【醫生】", opt: ["👨‍🏫", "👨‍🍳", "👨‍⚕️", "👨‍🚒"], ans: 2, note: "認讀字詞「醫生」。", tips: "測試職業名詞認讀。" },
+{ cat: "中文", q: "請認讀字詞並選出對應圖片：【月亮】", opt: ["☀️", "🌙", "☁️", "☄️"], ans: 1, note: "認讀字詞「月亮」。", tips: "測試天文名詞認讀。" },
+{ cat: "中文", q: "請認讀字詞並選出對應圖片：【剪刀】", opt: ["📏", "✏️", "✂️", "📎"], ans: 2, note: "認讀字詞「剪刀」。", tips: "測試文具名詞認讀。" },
+{ cat: "中文", q: "請認讀字詞並選出對應圖片：【雨靴】", opt: ["👟", "👞", "👢", "👠"], ans: 2, note: "認讀字詞「雨靴」。", tips: "測試服飾名詞認讀。" },
+
+// --- 類別 6：英文生字認讀 (English Vocabulary Matching 20題) ---
+{ cat: "English", q: "Read the word and choose the correct picture: 【Elephant】", opt: ["🦒", "🐘", "🦁", "🦓"], ans: 1, note: "Vocabulary: Elephant.", tips: "測試基礎動物英文生字認讀。" },
+{ cat: "English", q: "Read the word and choose the correct picture: 【Strawberry】", opt: ["🍎", "🍌", "🍓", "🍒"], ans: 2, note: "Vocabulary: Strawberry.", tips: "測試水果英文生字認讀。" },
+{ cat: "English", q: "Read the word and choose the correct picture: 【Airplane】", opt: ["🚀", "✈️", "🚢", "🚁"], ans: 1, note: "Vocabulary: Airplane.", tips: "測試交通工具英文生字。" },
+{ cat: "English", q: "Read the word and choose the correct picture: 【Sunny】", opt: ["🌙", "☁️", "☀️", "⭐"], ans: 2, note: "Vocabulary: Sunny.", tips: "測試天氣英文生字。" },
+{ cat: "English", q: "Read the word and choose the correct picture: 【Octopus】", opt: ["🐟", "🐙", "🦀", "🐢"], ans: 1, note: "Vocabulary: Octopus.", tips: "測試海洋生物英文生字。" },
+{ cat: "English", q: "Read the word and choose the correct picture: 【Watch】", opt: ["👓", "⌚", "📱", "📷"], ans: 1, note: "Vocabulary: Watch.", tips: "測試生活用品英文認讀。" },
+{ cat: "English", q: "Read the word and choose the correct picture: 【Soccer】", opt: ["🏀", "🎾", "⚽", "🏐"], ans: 2, note: "Vocabulary: Soccer.", tips: "測試運動英文生字。" },
+{ cat: "English", q: "Read the word and choose the correct picture: 【Umbrella】", opt: ["☂️", "🎒", "👒", "🧥"], ans: 0, note: "Vocabulary: Umbrella.", tips: "測試日常用品英文生字。" },
+{ cat: "English", q: "Read the word and choose the correct picture: 【Bicycle】", opt: ["🚗", "🚲", "🛵", "🚌"], ans: 1, note: "Vocabulary: Bicycle.", tips: "測試交通工具英文單字。" },
+{ cat: "English", q: "Read the word and choose the correct picture: 【Hamburger】", opt: ["🍕", "🍟", "🍔", "🥪"], ans: 2, note: "Vocabulary: Hamburger.", tips: "測試食物英文生字認讀。" },
+{ cat: "English", q: "Read the word and choose the correct picture: 【Butterfly】", opt: ["🐝", "🦋", "🐞", "🐜"], ans: 1, note: "Vocabulary: Butterfly.", tips: "測試昆蟲英文生字。" },
+{ cat: "English", q: "Read the word and choose the correct picture: 【Piano】", opt: ["🎸", "🎻", "🎹", "🎺"], ans: 2, note: "Vocabulary: Piano.", tips: "測試樂器英文生字。" },
+{ cat: "English", q: "Read the word and choose the correct picture: 【Watermelon】", opt: ["🍍", "🍉", "🍑", "🍐"], ans: 1, note: "Vocabulary: Watermelon.", tips: "測試水果英文生字。" },
+{ cat: "English", q: "Read the word and choose the correct picture: 【Penguin】", opt: ["🦆", "🦉", "🐧", "🦅"], ans: 2, note: "Vocabulary: Penguin.", tips: "測試鳥類/極地動物英文生字。" },
+{ cat: "English", q: "Read the word and choose the correct picture: 【Toothbrush】", opt: ["🧼", "🪥", "🛀", "🧴"], ans: 1, note: "Vocabulary: Toothbrush.", tips: "測試衛生用品英文生字。" },
+{ cat: "English", q: "Read the word and choose the correct picture: 【Rainbow】", opt: ["⚡", "🌈", "❄️", "🔥"], ans: 1, note: "Vocabulary: Rainbow.", tips: "測試自然現象英文生字。" },
+{ cat: "English", q: "Read the word and choose the correct picture: 【Doctor】", opt: ["👨‍🏫", "👨‍🍳", "👨‍⚕️", "👨‍🚒"], ans: 2, note: "Vocabulary: Doctor.", tips: "測試職業英文生字認讀。" },
+{ cat: "English", q: "Read the word and choose the correct picture: 【Moon】", opt: ["☀️", "🌙", "☁️", "☄️"], ans: 1, note: "Vocabulary: Moon.", tips: "測試天文英文生字。" },
+{ cat: "English", q: "Read the word and choose the correct picture: 【Scissors】", opt: ["📏", "✏️", "✂️", "📎"], ans: 2, note: "Vocabulary: Scissors.", tips: "測試文具英文生字。" },
+{ cat: "English", q: "Read the word and choose the correct picture: 【Rain boots】", opt: ["👟", "👞", "👢", "👠"], ans: 2, note: "Vocabulary: Rain boots.", tips: "測試衣物英文生字。" },
+
+
+// --- 類別 7：英文單字重組 (主題：水果/動物/交通工具 20題) ---
+{ cat: "English", q: "Unscramble (Fruit): 【P-A-P-E-L】", opt: ["APPLE", "PEAR", "GRAPE"], ans: 0, note: "Answer: APPLE.", tips: "測試最基礎的水果單字拼寫。" },
+{ cat: "English", q: "Unscramble (Animal): 【A-T-C】", opt: ["DOG", "CAT", "BAT"], ans: 1, note: "Answer: CAT.", tips: "測試三字母動物單字。" },
+{ cat: "English", q: "Unscramble (Transport): 【U-B-S】", opt: ["CAR", "VAN", "BUS"], ans: 2, note: "Answer: BUS.", tips: "測試基礎交通工具單字。" },
+{ cat: "English", q: "Unscramble (Fruit): 【R-E-A-P】", opt: ["APPLE", "PEAR", "PEACH"], ans: 1, note: "Answer: PEAR.", tips: "測試基礎水果單字拼寫。" },
+{ cat: "English", q: "Unscramble (Animal): 【O-G-D】", opt: ["DOG", "DIG", "DOT"], ans: 0, note: "Answer: DOG.", tips: "測試三字母動物單字。" },
+{ cat: "English", q: "Unscramble (Transport): 【A-R-C】", opt: ["CAT", "CAR", "CAN"], ans: 1, note: "Answer: CAR.", tips: "測試基礎交通工具單字。" },
+{ cat: "English", q: "Unscramble (Fruit): 【A-B-A-N-N-A】", opt: ["BANANA", "ORANGE", "CHERRY"], ans: 0, note: "Answer: BANANA.", tips: "測試長度稍長但規律的水果名。" },
+{ cat: "English", q: "Unscramble (Animal): 【I-G-P】", opt: ["BIG", "PIG", "PIN"], ans: 1, note: "Answer: PIG.", tips: "測試三字母動物單字。" },
+{ cat: "English", q: "Unscramble (Transport): 【I-P-S-H】", opt: ["SHIP", "SHOP", "FISH"], ans: 0, note: "Answer: SHIP.", tips: "測試四字母交通工具單字。" },
+{ cat: "English", q: "Unscramble (Fruit): 【M-E-L-O-N】", opt: ["LEMON", "MELON", "MANGO"], ans: 1, note: "Answer: MELON.", tips: "測試基礎水果單字拼寫。" },
+{ cat: "English", q: "Unscramble (Animal): 【I-O-N-L】", opt: ["LIAR", "LINE", "LION"], ans: 2, note: "Answer: LION.", tips: "測試常見動物單字。" },
+{ cat: "English", q: "Unscramble (Transport): 【I-K-E-B】", opt: ["BIKE", "BAKE", "BOOK"], ans: 0, note: "Answer: BIKE.", tips: "測試四字母交通工具單字。" },
+{ cat: "English", q: "Unscramble (Fruit): 【A-G-R-P-E】", opt: ["GREEN", "GREAT", "GRAPE"], ans: 2, note: "Answer: GRAPE.", tips: "測試基礎水果單字拼寫。" },
+{ cat: "English", q: "Unscramble (Animal): 【R-D-I-B】", opt: ["BIRD", "BED", "BAD"], ans: 0, note: "Answer: BIRD.", tips: "測試基礎動物單字拼寫。" },
+{ cat: "English", q: "Unscramble (Transport): 【A-I-N-T-R】", opt: ["RAIN", "TRAIN", "TRUCK"], ans: 1, note: "Answer: TRAIN.", tips: "測試基礎交通工具單字。" },
+{ cat: "English", q: "Unscramble (Fruit): 【E-M-O-N-L】", opt: ["LEMON", "MELON", "MANGO"], ans: 0, note: "Answer: LEMON.", tips: "測試基礎水果單字拼寫。" },
+{ cat: "English", q: "Unscramble (Animal): 【K-U-D-C】", opt: ["DOCK", "DARK", "DUCK"], ans: 2, note: "Answer: DUCK.", tips: "測試基礎動物單字拼寫。" },
+{ cat: "English", q: "Unscramble (Transport): 【O-A-B-T】", opt: ["BOAT", "BOOT", "BODY"], ans: 0, note: "Answer: BOAT.", tips: "測試基礎交通工具單字。" },
+{ cat: "English", q: "Unscramble (Fruit): 【E-A-C-H-P】", opt: ["PEACH", "PEAR", "PAPER"], ans: 0, note: "Answer: PEACH.", tips: "測試基礎水果單字拼寫。" },
+{ cat: "English", q: "Unscramble (Animal): 【R-O-G-F】", opt: ["FORK", "FROG", "FREE"], ans: 1, note: "Answer: FROG.", tips: "測試基礎動物單字拼寫。" },
+
+// --- 類別 8：中文謎語 (20題) ---
+{ cat: "中文", q: "【猜一動物】耳朵長長，尾巴短短，愛吃蘿蔔，蹦蹦跳跳。", opt: ["松鼠", "兔子", "袋鼠"], ans: 1, note: "謎底：兔子。", tips: "測試觀察動物的外形特徵。" },
+{ cat: "中文", q: "【猜一職業】戴著白帽子，拿著鍋鏟，在廚房做香噴噴的菜。", opt: ["警察", "醫生", "廚師"], ans: 2, note: "謎底：廚師。", tips: "測試對職業工具與工作地點的認知。" },
+{ cat: "中文", q: "【猜一身體部位】左一個，右一個，說話聽得見，一輩子不見面。", opt: ["眼睛", "耳朵", "肩膀"], ans: 1, note: "謎底：耳朵。", tips: "測試空間感與感官功能認知。" },
+{ cat: "中文", q: "【猜一水果】紅紅臉蛋長雀斑，外型像個小愛心，咬下一口甜又酸。", opt: ["蘋果", "櫻桃", "草莓"], ans: 2, note: "謎底：草莓。", tips: "從外觀細節（雀斑、心型）進行聯想。" },
+{ cat: "中文", q: "【猜一交通工具】長長一條像條龍，在地底跑得快，上班上學都要它。", opt: ["巴士", "港鐵", "飛機"], ans: 1, note: "謎底：港鐵 (MTR)。", tips: "測試對城市交通特徵的認識。" },
+{ cat: "中文", q: "【猜一家庭成員】爸爸的爸爸。", opt: ["外公", "爺爺", "叔叔"], ans: 1, note: "謎底：爺爺。", tips: "測試家庭倫理關係稱謂。" },
+{ cat: "中文", q: "【猜一社區設施】這裡有很多書，不可以大聲說話，可以借書回家看。", opt: ["公園", "電影院", "圖書館"], ans: 2, note: "謎底：圖書館。", tips: "測試社區環境與規則認知。" },
+{ cat: "中文", q: "【猜一動物】身穿花皮袍，說話喵喵叫，走路靜悄悄，捉鼠有功勞。", opt: ["老虎", "貓咪", "獅子"], ans: 1, note: "謎底：貓咪。", tips: "測試動物習性與叫聲聯想。" },
+{ cat: "中文", q: "【猜一水果】像個黃金小船，剝開外皮像月亮，吃起來軟又甜。", opt: ["香蕉", "檸檬", "菠蘿"], ans: 0, note: "謎底：香蕉。", tips: "測試形狀聯想力。" },
+{ cat: "中文", q: "【猜一職業】穿著制服，戴著警帽，抓壞人，護安全。", opt: ["警察", "消防員", "郵差"], ans: 0, note: "謎底：警察。", tips: "測試對社會職業貢獻的認知。" },
+{ cat: "中文", q: "【猜一身體部位】十個小兄弟，長在手尖頭，做事全靠它，大家有分工。", opt: ["手指", "腳趾", "牙齒"], ans: 0, note: "謎底：手指。", tips: "測試基礎生理結構認知。" },
+{ cat: "中文", q: "【猜一交通工具】大鳥大鳥天上飛，張開翅膀載客多，飛過高山和大海。", opt: ["風箏", "飛機", "直升機"], ans: 1, note: "謎底：飛機。", tips: "測試交通工具的功能與路徑。" },
+{ cat: "中文", q: "【猜一社區設施】有長椅子，有滑梯，大家在那兒玩耍做運動。", opt: ["餐廳", "學校", "公園"], ans: 2, note: "謎底：公園。", tips: "測試設施功能認知。" },
+{ cat: "中文", q: "【猜一水果】綠皮紅肚子，肚子裡有黑籽，夏天吃它最清涼。", opt: ["西瓜", "木瓜", "火龍果"], ans: 0, note: "謎底：西瓜。", tips: "測試顏色組合與季節聯想。" },
+{ cat: "中文", q: "【猜一動物】鼻子長長，耳朵像大扇子，身體像堵牆。", opt: ["大象", "犀牛", "河馬"], ans: 0, note: "謎底：大象。", tips: "抓住典型特徵進行聯想。" },
+{ cat: "中文", q: "【猜一家庭成員】媽媽的姐妹。", opt: ["奶奶", "姑姑", "姨媽"], ans: 2, note: "謎底：姨媽。", tips: "測試家庭稱謂。" },
+{ cat: "中文", q: "【猜一職業】在學校工作，教我們讀書寫字。", opt: ["老師", "護士", "校長"], ans: 0, note: "謎底：老師。", tips: "測試職業環境認知。" },
+{ cat: "中文", q: "【猜一身體部位】兩間小房子，裝滿小石子，天天要刷牙，不然長蟲子。", opt: ["鼻子", "嘴巴(牙齒)", "肚子"], ans: 1, note: "謎底：嘴巴/牙齒。", tips: "測試生活習慣與部位聯想。" },
+{ cat: "中文", q: "【猜一交通工具】四個圓輪子，滴滴響喇叭，載著一家人，馬路上面跑。", opt: ["自行車", "私家車", "火車"], ans: 1, note: "謎底：私家車。", tips: "測試交通工具基本構造。" },
+{ cat: "中文", q: "【猜一社區設施】生病了要去那裡，那裡有醫生和護士。", opt: ["超市", "銀行", "醫院"], ans: 2, note: "謎底：醫院。", tips: "測試生活常識。" },
+
+// --- 類別 9：英文謎語 (20題) ---
+{ cat: "English", q: "I am a fruit. I am red and heart-shaped. Who am I?", opt: ["Apple", "Strawberry", "Cherry"], ans: 1, note: "Answer: Strawberry.", tips: "English clue: heart-shaped." },
+{ cat: "English", q: "I have a long neck. I am yellow with spots. Who am I?", opt: ["Lion", "Zebra", "Giraffe"], ans: 2, note: "Answer: Giraffe.", tips: "English clue: long neck." },
+{ cat: "English", q: "I help you when you are sick. I work in a hospital. Who am I?", opt: ["Teacher", "Doctor", "Pilot"], ans: 1, note: "Answer: Doctor.", tips: "English clue: hospital & sick." },
+{ cat: "English", q: "I have four wheels. I carry people on the road. Beep beep!", opt: ["Bus", "Boat", "Car"], ans: 2, note: "Answer: Car.", tips: "English clue: four wheels." },
+{ cat: "English", q: "I have many books. You can read quietly here. Where am I?", opt: ["Library", "Park", "Market"], ans: 0, note: "Answer: Library.", tips: "English clue: books & quietly." },
+{ cat: "English", q: "I am your father's brother. Who am I?", opt: ["Uncle", "Grandpa", "Cousin"], ans: 0, note: "Answer: Uncle.", tips: "English clue: family relationships." },
+{ cat: "English", q: "I am yellow. I look like a star. I taste sour. Who am I?", opt: ["Banana", "Lemon", "Starfruit"], ans: 2, note: "Answer: Starfruit.", tips: "English clue: look like a star." },
+{ cat: "English", q: "I can fly like a bird. I take people on vacation. Who am I?", opt: ["Train", "Plane", "Ship"], ans: 1, note: "Answer: Plane.", tips: "English clue: fly like a bird." },
+{ cat: "English", q: "I have two hands but no arms. I tell you the time. Who am I?", opt: ["Clock", "Phone", "Book"], ans: 0, note: "Answer: Clock.", tips: "English clue: tell time." },
+{ cat: "English", q: "I am black and white. I look like a horse. Who am I?", opt: ["Cow", "Panda", "Zebra"], ans: 2, note: "Answer: Zebra.", tips: "English clue: black and white stripes." },
+{ cat: "English", q: "I work in a school. I teach you ABCs. Who am I?", opt: ["Nurse", "Teacher", "Chef"], ans: 1, note: "Answer: Teacher.", tips: "English clue: school & teach." },
+{ cat: "English", q: "I am on your face. You use me to smell flowers. What am I?", opt: ["Eye", "Ear", "Nose"], ans: 2, note: "Answer: Nose.", tips: "English clue: use to smell." },
+{ cat: "English", q: "I am long and yellow. Monkeys love to eat me. Who am I?", opt: ["Banana", "Mango", "Lemon"], ans: 0, note: "Answer: Banana.", tips: "English clue: monkeys love." },
+{ cat: "English", q: "I travel on tracks. I go 'Choo choo!'. Who am I?", opt: ["Bus", "Train", "Taxi"], ans: 1, note: "Answer: Train.", tips: "English clue: tracks & choo choo." },
+{ cat: "English", q: "I am your mother's mother. Who am I?", opt: ["Aunt", "Grandma", "Sister"], ans: 1, note: "Answer: Grandma.", tips: "English clue: mother's mother." },
+{ cat: "English", q: "I live in the water. I have fins and scales. Who am I?", opt: ["Bird", "Dog", "Fish"], ans: 2, note: "Answer: Fish.", tips: "English clue: fins & scales." },
+{ cat: "English", q: "I help you buy food. You go here to get bread and milk. Where am I?", opt: ["Bank", "Supermarket", "Zoo"], ans: 1, note: "Answer: Supermarket.", tips: "English clue: buy food." },
+{ cat: "English", q: "I fly at night. I can sleep upside down. Who am I?", opt: ["Bird", "Bee", "Bat"], ans: 2, note: "Answer: Bat.", tips: "English clue: sleep upside down." },
+{ cat: "English", q: "I have 10 of these on my feet. What are they?", opt: ["Fingers", "Toes", "Ears"], ans: 1, note: "Answer: Toes.", tips: "English clue: on feet." },
+{ cat: "English", q: "I drive a big bus. I take children to school. Who am I?", opt: ["Driver", "Police", "Farmer"], ans: 0, note: "Answer: Driver.", tips: "English clue: drive a bus." },
+
+// --- 類別 10：數學運算 (20 以內加減 20題) ---
+{ cat: "數學", q: "計算：8 + 5 = ?", opt: ["12", "13", "14"], ans: 1, note: "8 加上 5 等於 13。", tips: "測試基礎進位加法。" },
+{ cat: "數學", q: "計算：15 - 7 = ?", opt: ["7", "8", "9"], ans: 1, note: "15 減去 7 等於 8。", tips: "測試基礎借位減法。" },
+{ cat: "數學", q: "計算：12 + 6 = ?", opt: ["17", "18", "19"], ans: 1, note: "12 加上 6 等於 18。", tips: "測試不進位兩位數加法。" },
+{ cat: "數學", q: "計算：20 - 4 = ?", opt: ["14", "15", "16"], ans: 2, note: "20 減去 4 等於 16。", tips: "測試整十數減法。" },
+{ cat: "數學", q: "小明有 9 粒糖果，媽媽再給他 7 粒，他共有多少粒？", opt: ["15", "16", "17"], ans: 1, note: "9 + 7 = 16。", tips: "數學應用題：加法運算。" },
+{ cat: "數學", q: "樹上有 14 隻鳥，飛走了 6 隻，還剩多少隻？", opt: ["7", "8", "9"], ans: 1, note: "14 - 6 = 8。", tips: "數學應用題：減法運算。" },
+{ cat: "數學", q: "計算：7 + 7 = ?", opt: ["13", "14", "15"], ans: 1, note: "7 加 7 等於 14。", tips: "測試相同數相加。" },
+{ cat: "數學", q: "計算：18 - 9 = ?", opt: ["8", "9", "10"], ans: 1, note: "18 減 9 等於 9。", tips: "測試減法運算。" },
+{ cat: "數學", q: "盒子裡有 11 個蘋果，再放進 9 個，共有多少個？", opt: ["19", "20", "21"], ans: 1, note: "11 + 9 = 20。", tips: "測試湊十法的應用。" },
+{ cat: "數學", q: "計算：13 - 5 = ?", opt: ["7", "8", "9"], ans: 1, note: "13 減 5 等於 8。", tips: "測試借位減法。" },
+{ cat: "數學", q: "小麗買了 6 本書，哥哥買了 8 本書，兩人共買了多少本？", opt: ["14", "15", "16"], ans: 0, note: "6 + 8 = 14。", tips: "數學應用題：合併概念。" },
+{ cat: "數學", q: "計算：16 + 3 = ?", opt: ["18", "19", "20"], ans: 1, note: "16 加上 3 等於 19。", tips: "測試基礎加法。" },
+{ cat: "數學", q: "停車場有 12 輛車，開走了 5 輛，還剩多少輛？", opt: ["6", "7", "8"], ans: 1, note: "12 - 5 = 7。", tips: "數學應用題：剩餘概念。" },
+{ cat: "數學", q: "計算：4 + 9 = ?", opt: ["13", "14", "15"], ans: 0, note: "4 加上 9 等於 13。", tips: "測試進位加法。" },
+{ cat: "數學", q: "計算：17 - 8 = ?", opt: ["8", "9", "10"], ans: 1, note: "17 減 8 等於 9。", tips: "測試減法計算。" },
+{ cat: "數學", q: "桌上有 5 塊蛋糕，妹妹吃了 2 塊，哥哥吃了 2 塊，還剩幾塊？", opt: ["1", "2", "3"], ans: 0, note: "5 - 2 - 2 = 1。", tips: "多步運算應用題。" },
+{ cat: "數學", q: "計算：10 + 10 = ?", opt: ["10", "20", "30"], ans: 1, note: "10 加 10 等於 20。", tips: "整十數加法。" },
+{ cat: "數學", q: "小明排隊排第 6，他後面還有 8 個人，這一隊共有幾人？", opt: ["13", "14", "15"], ans: 1, note: "6 + 8 = 14。", tips: "排隊邏輯題（加法應用）。" },
+{ cat: "數學", q: "計算：19 - 11 = ?", opt: ["7", "8", "9"], ans: 1, note: "19 減 11 等於 8。", tips: "兩位數減法。" },
+{ cat: "數學", q: "籃子裡有 20 隻雞蛋，破了 3 隻，還剩多少隻？", opt: ["16", "17", "18"], ans: 1, note: "20 - 3 = 17。", tips: "整十數借位減法。" },
+
+// --- 類別 11：數學連算 (20 以內加減連算 20題) ---
+{ cat: "數學", q: "計算：5 + 3 + 4 = ?", opt: ["11", "12", "13"], ans: 1, note: "5 + 3 = 8，8 + 4 = 12。", tips: "測試連續加法的穩定性。" },
+{ cat: "數學", q: "計算：10 - 2 - 3 = ?", opt: ["5", "6", "7"], ans: 0, note: "10 - 2 = 8，8 - 3 = 5。", tips: "測試連續減法運算。" },
+{ cat: "數學", q: "計算：7 + 6 - 4 = ?", opt: ["8", "9", "10"], ans: 1, note: "7 + 6 = 13，13 - 4 = 9。", tips: "測試加減混合運算。" },
+{ cat: "數學", q: "計算：15 - 5 + 8 = ?", opt: ["16", "18", "20"], ans: 1, note: "15 - 5 = 10，10 + 8 = 18。", tips: "測試減法後加法的運算。" },
+{ cat: "數學", q: "計算：9 + 9 - 5 = ?", opt: ["12", "13", "14"], ans: 1, note: "9 + 9 = 18，18 - 5 = 13。", tips: "測試相同數相加後的減法。" },
+{ cat: "數學", q: "計算：20 - 10 - 5 = ?", opt: ["5", "10", "15"], ans: 0, note: "20 - 10 = 10，10 - 5 = 5。", tips: "測試對整十數的連續減法。" },
+{ cat: "數學", q: "計算：8 + 2 + 7 = ?", opt: ["15", "17", "19"], ans: 1, note: "8 + 2 = 10，10 + 7 = 17。", tips: "引導孩子尋找「湊十」的組合。" },
+{ cat: "數學", q: "計算：12 - 4 + 6 = ?", opt: ["12", "14", "16"], ans: 1, note: "12 - 4 = 8，8 + 6 = 14。", tips: "基礎借位減法與加法混合。" },
+{ cat: "數學", q: "計算：6 + 5 + 6 = ?", opt: ["15", "17", "19"], ans: 1, note: "6 + 5 = 11，11 + 6 = 17。", tips: "測試多進位加法。" },
+{ cat: "數學", q: "計算：18 - 8 - 3 = ?", opt: ["5", "7", "9"], ans: 1, note: "18 - 8 = 10，10 - 3 = 7。", tips: "測試先減去個位數的技巧。" },
+{ cat: "數學", q: "計算：4 + 7 + 4 = ?", opt: ["13", "15", "17"], ans: 1, note: "4 + 7 = 11，11 + 4 = 15。", tips: "測試三數連加。" },
+{ cat: "數學", q: "計算：14 + 3 - 7 = ?", opt: ["8", "10", "12"], ans: 1, note: "14 + 3 = 17，17 - 7 = 10。", tips: "測試先加後減。" },
+{ cat: "數學", q: "計算：11 - 6 + 9 = ?", opt: ["12", "14", "16"], ans: 1, note: "11 - 6 = 5，5 + 9 = 14。", tips: "混合借位與進位運算。" },
+{ cat: "數學", q: "計算：13 + 5 - 10 = ?", opt: ["6", "8", "10"], ans: 1, note: "13 + 5 = 18，18 - 10 = 8。", tips: "測試減去整十數。" },
+{ cat: "數學", q: "計算：2 + 9 + 8 = ?", opt: ["17", "18", "19"], ans: 2, note: "2 + 9 = 11，11 + 8 = 19。", tips: "引導觀察：2+8可以湊成10。" },
+{ cat: "數學", q: "計算：16 - 7 - 2 = ?", opt: ["5", "7", "9"], ans: 1, note: "16 - 7 = 9，9 - 2 = 7。", tips: "兩次減法運算。" },
+{ cat: "數學", q: "計算：19 - 4 + 2 = ?", opt: ["15", "17", "19"], ans: 1, note: "19 - 4 = 15，15 + 2 = 17。", tips: "不進位/借位混合。" },
+{ cat: "數學", q: "計算：3 + 8 + 5 = ?", opt: ["14", "16", "18"], ans: 1, note: "3 + 8 = 11，11 + 5 = 16。", tips: "三數加法練習。" },
+{ cat: "數學", q: "計算：17 - 9 + 4 = ?", opt: ["10", "12", "14"], ans: 1, note: "17 - 9 = 8，8 + 4 = 12。", tips: "借位後進位的組合練習。" },
+{ cat: "數學", q: "計算：1 + 15 - 6 = ?", opt: ["8", "10", "12"], ans: 1, note: "1 + 15 = 16，16 - 6 = 10。", tips: "先加後減去尾數。" },
+
+// --- 類別 12：數學連算應用題 (20 以內加減連算 20題) ---
+{ cat: "數學", q: "小明有 5 粒糖，媽媽給他 5 粒，他吃掉了 2 粒，還剩幾粒？", opt: ["7", "8", "9"], ans: 1, note: "5 + 5 - 2 = 8。", tips: "測試基礎加減混合應用。" },
+{ cat: "數學", q: "樹上有 12 隻鳥，飛來了 3 隻，又飛走了 5 隻，樹上還有幾隻？", opt: ["9", "10", "11"], ans: 1, note: "12 + 3 - 5 = 10。", tips: "測試數量的增減邏輯。" },
+{ cat: "數學", q: "巴士上有 15 人，到站後 5 人下車，又有 2 人上車，車上現有幾人？", opt: ["11", "12", "13"], ans: 1, note: "15 - 5 + 2 = 12。", tips: "測試生活情境中的加減混合。" },
+{ cat: "數學", q: "果籃裡有 8 個蘋果、4 個橙和 6 個梨，共有水果多少個？", opt: ["16", "18", "20"], ans: 1, note: "8 + 4 + 6 = 18。", tips: "三數連加應用題。" },
+{ cat: "數學", q: "盒子裡有 20 塊積木，哥哥拿走 7 塊，弟弟拿走 3 塊，還剩幾塊？", opt: ["10", "11", "12"], ans: 0, note: "20 - 7 - 3 = 10。", tips: "連續減法應用題，引導觀察 7+3=10。" },
+{ cat: "數學", q: "小麗排隊買票，她前面有 6 人，後面有 4 人，這一隊共有幾人？", opt: ["10", "11", "12"], ans: 1, note: "6 (前面) + 4 (後面) + 1 (小麗本人) = 11。", tips: "經典排隊邏輯題，注意要加上自己。" },
+{ cat: "數學", q: "文具店有 18 枝鉛筆，上午賣出 8 枝，下午賣出 4 枝，還剩幾枝？", opt: ["5", "6", "7"], ans: 1, note: "18 - 8 - 4 = 6。", tips: "測試連續減法運算。" },
+{ cat: "數學", q: "停車場有 7 輛車，開進來 9 輛，又開走了 6 輛，現有幾輛？", opt: ["9", "10", "11"], ans: 1, note: "7 + 9 - 6 = 10。", tips: "測試基礎加減混合。" },
+{ cat: "數學", q: "我有 13 元，買零食用了 5 元，爸爸再給我 10 元，我現有幾元？", opt: ["16", "18", "20"], ans: 1, note: "13 - 5 + 10 = 18。", tips: "涉及金錢概念的加減混合。" },
+{ cat: "數學", q: "公園裡有 9 個小朋友在玩耍，走了 3 個，又來了 8 個，現有幾人？", opt: ["13", "14", "15"], ans: 1, note: "9 - 3 + 8 = 14。", tips: "測試先減後加邏輯。" },
+{ cat: "數學", q: "魚缸裡有 6 條紅魚、5 條金魚和 4 條黑魚，共有魚幾條？", opt: ["14", "15", "16"], ans: 1, note: "6 + 5 + 4 = 15。", tips: "引導觀察 6+4=10。" },
+{ cat: "數學", q: "小貓抓了 11 隻老鼠，逃走了 4 隻，又抓回了 2 隻，現有多少隻？", opt: ["8", "9", "10"], ans: 1, note: "11 - 4 + 2 = 9。", tips: "測試情境理解與運算。" },
+{ cat: "數學", q: "書架上有 17 本書，妹妹借走 7 本，姐姐放回 3 本，現有幾本？", opt: ["12", "13", "14"], ans: 1, note: "17 - 7 + 3 = 13。", tips: "測試基礎加減混合。" },
+{ cat: "數學", q: "一隊小朋友有 14 人，老師排在隊頭，助教排在隊尾，全隊共有幾人？", opt: ["14", "15", "16"], ans: 2, note: "14 (小朋友) + 1 (老師) + 1 (助教) = 16。", tips: "測試對成員組成的理解。" },
+{ cat: "數學", q: "媽媽買了 12 隻蛋，做蛋糕用了 4 隻，做早餐用了 2 隻，還剩幾隻？", opt: ["5", "6", "7"], ans: 1, note: "12 - 4 - 2 = 6。", tips: "測試日常場景的減法應用。" },
+{ cat: "數學", q: "花園裡開了 8 朵紅花和 7 朵黃花，採走了 5 朵，還剩幾朵？", opt: ["9", "10", "11"], ans: 1, note: "8 + 7 - 5 = 10。", tips: "測試先加後減。" },
+{ cat: "數學", q: "操場上有 20 個足球，1A 班借走 9 個，1B 班借走 6 個，還剩幾個？", opt: ["4", "5", "6"], ans: 1, note: "20 - 9 - 6 = 5。", tips: "測試較大數字的連續減法。" },
+{ cat: "數學", q: "我有 4 粒草莓，姐姐比我多 6 粒，我們共有幾粒草莓？", opt: ["10", "12", "14"], ans: 2, note: "4 (我) + (4+6) (姐姐) = 14。", tips: "進階邏輯題：需要先算姐姐的數量。" },
+{ cat: "數學", q: "小猴子採了 15 個桃子，吃了 3 個，送給朋友 5 個，還剩幾個？", opt: ["7", "8", "9"], ans: 0, note: "15 - 3 - 5 = 7。", tips: "測試連續減法應用。" },
+{ cat: "數學", q: "冰箱有 2 瓶牛奶，媽媽買回 10 瓶，爸爸喝了 1 瓶，還剩幾瓶？", opt: ["10", "11", "12"], ans: 1, note: "2 + 10 - 1 = 11。", tips: "測試基礎加減混合。" },
+
+
+
 // --- 類別 1：數學天平代換 (6題) ---
     { cat: "數學", q: "天平左邊有 1 個大西瓜，右邊有 4 個菠蘿，天平平衡。2 個大西瓜等於幾個菠蘿？", opt: ["4 個", "6 個", "8 個", "10 個"], ans: 2, note: "1=4, 2=8。", tips: "測試倍數概念。" },
     { cat: "數學", q: "天平左邊有 9 粒草莓，右邊有 3 粒香蕉，天平平衡。1 粒香蕉等於幾粒草莓？", opt: ["2 粒", "3 粒", "4 粒", "5 粒"], ans: 1, note: "9 除以 3 = 3。", tips: "測試除法分配邏輯。" },
@@ -318,7 +499,7 @@
     { cat: "數學", q: "有 13 個小夥伴要坐船，每隻船限坐 6 人，至少需要幾隻船？", opt: ["2 隻", "3 隻", "4 隻", "1 隻"], ans: 1, note: "6+6=12，還剩 1 人要多一隻船，共 3 隻。", tips: "這是名校最愛的「進一法」分配題。" },
     { cat: "數學", q: "老師有 9 枝鉛筆，平均分給 3 位同學，每人分得幾枝？", opt: ["2 枝", "3 枝", "4 枝", "5 枝"], ans: 1, note: "3x3=9。", tips: "基礎除法感。" },
     { cat: "數學", q: "小英有 16 塊積木，想搭出 4 個一樣的小房子，每個房子用幾塊？", opt: ["3 塊", "4 塊", "5 塊", "8 塊"], ans: 1, note: "16 分 4 份是 4。", tips: "圖形組合分配。" },
-    { cat: "數學", q: "有一打（12 個）雞蛋，全家 4 口人平分，每人吃幾個？", opt: ["2 個", "3 個", "4 個", "6 個"], ans: 1, note: "12 除以 4 等於 3。", tips: "生活術語「一打」的應用。" },
+    { cat: "數學", q: "有一打（12 隻）雞蛋，全家 4 口人平分，每人吃幾隻？", opt: ["2 隻", "3 隻", "4 隻", "6 隻"], ans: 1, note: "12 除以 4 等於 3。", tips: "生活術語「一打」的應用。" },
     { cat: "數學", q: "小明有 5 粒糖，小紅有 3 粒糖。小明要給小紅幾粒，兩人的糖才一樣多？", opt: ["1 粒", "2 粒", "3 粒", "4 粒"], ans: 0, note: "總共 8 粒，每人應得 4 粒。5-1=4, 3+1=4。", tips: "移多補少邏輯，非常經典。" },
     { cat: "數學", q: "籠子裡有 8 隻兔子，一共有幾隻耳朵？", opt: ["8 隻", "12 隻", "16 隻", "24 隻"], ans: 2, note: "每隻 2 隻耳朵，8x2=16。", tips: "生物特徵分配。" },
     { cat: "數學", q: "18 個小朋友排隊，平均分成 2 行，每行有幾人？", opt: ["8 人", "9 人", "10 人", "18 人"], ans: 1, note: "18 的一半是 9。", tips: "隊伍分配邏輯。" },
@@ -401,16 +582,6 @@
     { cat: "數學", q: "小花排第 3，小麗排第 7，她們中間隔了幾個小朋友？", opt: ["3 個", "4 個", "5 個", "6 個"], ans: 0, note: "第 4, 5, 6 個在中間，共 3 個。", tips: "測試中間值的精確計算。" },
     { cat: "數學", q: "從左邊數起，蘋果排第 5；從右邊數起，蘋果排第 1。這排共有幾個水果？", opt: ["4 個", "5 個", "6 個", "7 個"], ans: 1, note: "5 + 1 - 1 = 5。其實就是排最後一個。", tips: "多向數數邏輯。" },
     { cat: "數學", q: "小明排在第 12 個，他前面的人排第幾？", opt: ["第 11", "第 12", "第 13", "第 1"], ans: 0, note: "前面的位次少 1。", tips: "數序基礎。" },
-
-    // --- 類別 5：排隊與序數陷阱 (6題) ---
-    { cat: "數學", q: "小方排隊排第 6，小強排在小方後面，小強排第幾？", opt: ["第 5", "第 6", "第 7", "第 8"], ans: 2, note: "後面的數字大 1。", tips: "序列方向感。" },
-    { cat: "數學", q: "一隊小朋友，小紅從前面數排第 4，從後面數也排第 4，這隊共有幾人？", opt: ["6 人", "7 人", "8 人", "9 人"], ans: 1, note: "4 + 4 - 1 = 7。", tips: "經典重疊計算。" },
-    { cat: "數學", q: "小明前面有 2 人，後面有 6 人，這一隊共有幾人？", opt: ["8 人", "9 人", "10 人", "11 人"], ans: 1, note: "2 + 1(小明) + 6 = 9。", tips: "區分「前面有」與「第幾」。" },
-    { cat: "數學", q: "小花排第 3，小麗排第 7，她們中間隔了幾個小朋友？", opt: ["3 個", "4 個", "5 個", "6 個"], ans: 0, note: "第 4, 5, 6 個在中間，共 3 個。", tips: "測試中間值的精確計算。" },
-    { cat: "數學", q: "從左邊數起，蘋果排第 5；從右邊數起，蘋果排第 1。這排共有幾個水果？", opt: ["4 個", "5 個", "6 個", "7 個"], ans: 1, note: "5 + 1 - 1 = 5。其實就是排最後一個。", tips: "多向數數邏輯。" },
-    { cat: "數學", q: "小明排在第 12 個，他前面的人排第幾？", opt: ["第 11", "第 12", "第 13", "第 1"], ans: 0, note: "前面的位次少 1。", tips: "數序基礎。" },
-
-
 
     // --- 中文細心度與語感 ---
     { cat: "中文", q: "選出沒有錯別字的句子：", opt: ["今天天氣很晴郎。", "今天天氣很晴朗。", "今天天氣很精朗。", "今天天氣很清朗。"], ans: 1, note: "字形辨析。區分「朗、郎、精、清」。", tips: "名校考小朋友是否會寫「懶字」，即少了一劃或偏旁錯誤。" },
@@ -681,74 +852,89 @@
         { cat: "聽力", q: "小松鼠帶蘋果，小鹿帶香蕉。誰負責帶香蕉？", opt: ["小松鼠", "小兔", "小鹿", "小熊"], ans: 2, note: "故事中提到小鹿帶香蕉。", tips: "人物與物件配對記憶。" }
     ];
 
-    // (註：以上僅為範例，您可以自行將之前生成的 550 題全部貼入此陣列)
-
-    let quizData = [];
-    let currentIdx = 0;
+    // --- 遊戲狀態 ---
     let userScore = 0;
+    let quizPool = [];
+    let currentIdx = 0;
     let currentSelected = null;
+    let userHistory = []; // 新增功能：紀錄作答過程
 
+    // --- 1. 初始化測驗 ---
     function initQuiz() {
-        // 隨機選取 20 題
-        quizData = [...questionBank].sort(() => 0.5 - Math.random()).slice(0, 20);
-        currentIdx = 0;
-        userScore = 0;
         document.getElementById("start-screen").style.display = "none";
         document.getElementById("quiz-screen").style.display = "block";
+        document.getElementById("result-screen").style.display = "none";
+
+        userScore = 0;
+        userHistory = [];
+        currentIdx = 0;
+
+        // 隨機抽取 20 題
+        quizPool = [...questionBank].sort(() => 0.5 - Math.random()).slice(0, 20);
         renderQuestion();
     }
 
+    // --- 2. 渲染題目 ---
     function renderQuestion() {
-        const q = quizData[currentIdx];
         currentSelected = null;
-        
-        document.getElementById("current-pos").innerText = `題目 ${currentIdx + 1}/20`;
-        document.getElementById("cat-display").innerText = q.cat;
-        document.getElementById("progress-inner").style.width = `${((currentIdx + 1) / 20) * 100}%`;
+        const q = quizPool[currentIdx];
+
+        // 更新 UI
+        document.getElementById("q-count").innerText = `題目 ${currentIdx + 1} / 20`;
+        document.getElementById("q-cat").innerText = q.cat;
         document.getElementById("q-text").innerText = q.q;
-        
-        const optionsBox = document.getElementById("options-box");
-        optionsBox.innerHTML = "";
-        q.opt.forEach((text, index) => {
-            const btn = document.createElement("button");
-            btn.className = "option-btn";
-            btn.innerText = text;
-            btn.onclick = () => {
-                currentSelected = index;
-                document.querySelectorAll(".option-btn").forEach(b => b.classList.remove("selected"));
-                btn.classList.add("selected");
+        document.getElementById("progress-inner").style.width = `${((currentIdx + 1) / 20) * 100}%`;
+
+        // 渲染選項
+        const optionsArea = document.getElementById("options-area");
+        optionsArea.innerHTML = "";
+        q.opt.forEach((text, i) => {
+            const div = document.createElement("div");
+            div.className = "option";
+            div.innerText = text;
+            div.onclick = () => {
+                currentSelected = i;
+                document.querySelectorAll(".option").forEach(o => o.classList.remove("selected"));
+                div.classList.add("selected");
+                document.getElementById("confirm-btn").disabled = false;
             };
-            optionsBox.appendChild(btn);
+            optionsArea.appendChild(div);
         });
 
-        document.getElementById("confirm-btn").style.display = "inline-block";
+        // 重置區域
+        document.getElementById("confirm-btn").style.display = "block";
+        document.getElementById("confirm-btn").disabled = true;
         document.getElementById("feedback-area").style.display = "none";
     }
 
+    // --- 3. 提交答案 ---
     function handleSubmit() {
-        if (currentSelected === null) {
-            alert("請選擇一個答案！");
-            return;
-        }
-        const q = quizData[currentIdx];
-        const resMsg = document.getElementById("res-msg");
-        const resNote = document.getElementById("res-note");
-        const feedback = document.getElementById("feedback-area");
+        if (currentSelected === null) return;
 
-        feedback.style.display = "block";
+        const q = quizPool[currentIdx];
+        const isCorrect = (currentSelected === q.ans);
+
+        // 【紀錄歷史】
+        userHistory.push({
+            question: q.q,
+            userAns: q.opt[currentSelected],
+            correctAns: q.opt[q.ans],
+            isCorrect: isCorrect
+        });
+
+        if (isCorrect) userScore += 5;
+
+        // 顯示反饋
+        const resBox = document.getElementById("res-box");
+        resBox.className = isCorrect ? "correct-box" : "wrong-box";
+        document.getElementById("res-msg").innerHTML = isCorrect ? "<strong>✅ 正確</strong>" : `<strong>❌ 錯誤</strong> (正確答案：${q.opt[q.ans]})`;
+        document.getElementById("res-note").innerHTML = `<strong>解析：</strong>${q.note}<br><strong>💡 建議：</strong>${q.tips}`;
+        
         document.getElementById("confirm-btn").style.display = "none";
-
-        if (currentSelected === q.ans) {
-            userScore += 5;
-            feedback.className = "correct-box";
-            resMsg.innerHTML = "<strong>✅ 正確 (Correct)</strong>";
-        } else {
-            feedback.className = "wrong-box";
-            resMsg.innerHTML = `<strong>❌ 錯誤 (Wrong)</strong><br>正確答案是：${q.opt[q.ans]}`;
-        }
-        resNote.innerHTML = `<strong>解析：</strong>${q.note}<br><strong>💡 家長建議：</strong>${q.tips}`;
+        document.getElementById("feedback-area").style.display = "block";
     }
 
+    // --- 4. 下一題 ---
     function goNext() {
         currentIdx++;
         if (currentIdx < 20) {
@@ -758,14 +944,45 @@
         }
     }
 
+    // --- 5. 顯示結果回顧 ---
     function showResult() {
-        let rank = userScore >= 90 ? "【卓越】具備名校入學實力！" : (userScore >= 70 ? "【良好】表現穩定。" : "【需加強】建議多加練習。");
-        document.getElementById("quiz-screen").innerHTML = `
-            <div style="text-align:center; padding: 40px 0;">
-                <h2 style="font-size: 2em;">測驗結果</h2>
-                <div style="font-size: 4em; color: var(--primary); font-weight: bold;">${userScore}</div>
-                <p style="font-size: 1.2em; color: #555;">${rank}</p>
-                <button class="btn-main" style="background: var(--primary); color: white; margin-top: 30px;" onclick="location.reload()">重新測驗</button>
+        document.getElementById("quiz-screen").style.display = "none";
+        const resultScreen = document.getElementById("result-screen");
+        resultScreen.style.display = "block";
+
+        let rank = userScore >= 90 ? "卓越" : (userScore >= 70 ? "良好" : "需努力");
+        
+        // 生成回顧表格 HTML
+        let tableHtml = `
+            <div style="margin-top:30px; text-align:left;">
+                <h3 style="color:var(--primary)">📊 作答紀錄回顧</h3>
+                <table>
+                    <thead>
+                        <tr><th>題號</th><th>題目</th><th>結果</th></tr>
+                    </thead>
+                    <tbody>
+                        ${userHistory.map((item, i) => `
+                            <tr>
+                                <td>${i+1}</td>
+                                <td>${item.question}</td>
+                                <td style="color:${item.isCorrect ? 'green' : 'red'}; font-weight:bold;">
+                                    ${item.isCorrect ? '✅' : '❌'}<br>
+                                    <small style="color:#666; font-weight:normal;">${item.isCorrect ? '' : '正解：'+item.correctAns}</small>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+        `;
+
+        resultScreen.innerHTML = `
+            <div style="text-align:center;">
+                <h2>測驗結束</h2>
+                <div style="font-size: 3em; color: var(--primary); font-weight: bold;">${userScore} 分</div>
+                <p>等級：${rank}</p>
+                <button class="btn-main" style="background: var(--secondary); color: white;" onclick="location.reload()">再測一次</button>
+                ${tableHtml}
             </div>
         `;
     }
