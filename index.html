@@ -62,14 +62,14 @@
 
 <script>
     const questionBank = [
-// --- 數理邏輯強化 (針對 TSL 風格) ---
+// --- 類別 ：數理邏輯強化 (針對 TSL 風格) ---
     { cat: "數學", q: "小明排隊，從前面數起他是第 4 個，從後面數起他也是第 4 個，請問一共有多少人在排隊？", opt: ["7 人", "8 人", "9 人", "6 人"], ans: 0, note: "重疊邏輯題。小明被數了兩次，所以是 4 + 4 - 1 = 7。", tips: "這是名校最經典的排隊題，測試小朋友是否具備空間重疊概念。" },
     { cat: "數學", q: "天平左邊有 2 個蘋果，右邊有 1 個蘋果和 2 個橘子，天平現在是平衡的。請問 1 個蘋果和幾個橘子一樣重？", opt: ["1 個", "2 個", "3 個", "4 個"], ans: 1, note: "代換邏輯。左邊減去1個蘋果，右邊也減去1個蘋果，剩下1個蘋果 = 2個橘子。", tips: "測試等量代換能力，是奧數基礎。" },
     { cat: "數學", q: "找規律：2, 4, 8, (  )", opt: ["10", "12", "14", "16"], ans: 3, note: "倍數規律。每個數是前一個數的兩倍。", tips: "訓練小朋友觀察數字間的關係，而不僅僅是加法。" },
     { cat: "數學", q: "時鐘現在是 3 點正，請問時針和分針組成的圖形像什麼？", opt: ["直線", "直角(L形)", "圓形", "三角形"], ans: 1, note: "時間與空間結合。3點正時，時針指向3，分針指向12，形成90度直角。", tips: "測試對時鐘觀察及幾何形狀的認知。" },
     { cat: "數學", q: "一條繩子折兩摺後從中間剪一刀，會變成幾段？", opt: ["2 段", "3 段", "4 段", "5 段"], ans: 1, note: "空間想像。折兩摺變3層，剪一刀通常產生3段（需想像開口與閉合位）。", tips: "這類題目難度高，可以拿實際繩子示範一次，印象最深。" },
 
-    // --- 英文雙語思維 (針對 CKY / DGJS 風格) ---
+    // --- 類別 ：英文雙語思維 (針對 CKY / DGJS 風格) ---
     { cat: "English", q: "Which word is the 'odd one out'? (選出不屬於同類的詞)", opt: ["Spring", "Summer", "Sunday", "Winter"], ans: 2, note: "Category: Sunday is a day of the week, others are seasons.", tips: "測試詞彙分類能力及對時間單位的敏感度。" },
     { cat: "English", q: "I have four legs, I can bark, and I like to wag my tail. Who am I?", opt: ["A cat", "A dog", "A rabbit", "A bird"], ans: 1, note: "Riddle: Identifying an animal by its actions (bark, wag tail).", tips: "測試聽力理解與特徵聯想。" },
     { cat: "English", q: "Opposites: 'Clean' is to 'Dirty' as 'Full' is to ______.", opt: ["Hungry", "Empty", "Big", "Slow"], ans: 1, note: "Analogy (類比)。Full 的相反詞是 Empty。", tips: "這是名校高階考法，測試邏輯對應能力。" },
@@ -119,7 +119,7 @@
     { cat: "English", q: "The baby is ______ in the bed. Be quiet.", opt: ["sleeping", "running", "shouting", "dancing"], ans: 0, note: "Quiet (安靜) 對應 Sleep。", tips: "環境暗示題。" },
     { cat: "English", q: "We ______ to school by bus.", opt: ["go", "goes", "going", "gone"], ans: 0, note: "We 是複數主語。", tips: "主謂一致性。" },
 
-    // 2. 形容詞與相反詞 (10題)
+    // --- 類別 ：2. 形容詞與相反詞 (10題)
     { cat: "English", q: "The ice cream is cold, but the soup is ______.", opt: ["hot", "sweet", "big", "blue"], ans: 0, note: "Opposite of cold is hot.", tips: "測試相反詞對比。" },
     { cat: "English", q: "The giraffe has a ______ neck.", opt: ["short", "long", "fat", "thin"], ans: 1, note: "Giraffes are known for long necks.", tips: "特徵辨析。" },
     { cat: "English", q: "This box is too ______. I cannot lift it.", opt: ["light", "heavy", "small", "soft"], ans: 1, note: "Cannot lift (搬不動) 對應 Heavy。", tips: "邏輯推理。" },
@@ -131,7 +131,7 @@
     { cat: "English", q: "A lemon is ______, but candy is sweet.", opt: ["salty", "sour", "spicy", "bitter"], ans: 1, note: "Lemons are sour.", tips: "味覺形容詞。" },
     { cat: "English", q: "The rock is hard, but the sponge is ______.", opt: ["soft", "strong", "heavy", "cold"], ans: 0, note: "Opposite of hard is soft.", tips: "材質對比。" },
 
-    // 3. 數數與量詞邏輯 (10題)
+    // --- 類別 ：3. 數數與量詞邏輯 (10題)
     { cat: "English", q: "How many legs does a spider have?", opt: ["two", "four", "six", "eight"], ans: 3, note: "Spiders have 8 legs.", tips: "常識與數字結合。" },
     { cat: "English", q: "Which one is NOT a fruit?", opt: ["Apple", "Banana", "Carrot", "Orange"], ans: 2, note: "Carrot is a vegetable.", tips: "分類排除法。" },
     { cat: "English", q: "I have two ______. I can hear the music.", opt: ["eyes", "ears", "noses", "hands"], ans: 1, note: "Hear (聽) 對應 Ears。", tips: "五官功能辨析。" },
@@ -208,7 +208,7 @@
     { cat: "中文", q: "這(  )耳環閃閃發亮。", opt: ["隻", "對", "個", "副"], ans: 1, note: "成對的飾物用「對」。", tips: "測試成雙概念。" },
     { cat: "中文", q: "牆上掛著一(  )西裝。", opt: ["條", "套", "件", "隻"], ans: 1, note: "整組的衣服用「套」。", tips: "整體概念的量詞。" },
 
-    // 自然與動植物類
+    // --- 類別 ：自然與動植物類
     { cat: "中文", q: "天邊出現了一(  )彩虹。", opt: ["個", "條", "道", "根"], ans: 2, note: "光線或條狀自然現象用「道」。", tips: "高階自然現象量詞。" },
     { cat: "中文", q: "花叢中站著一(  )白鷺。", opt: ["條", "隻", "個", "頭"], ans: 1, note: "飛禽類動物用「隻」。", tips: "動物基本量詞。" },
     { cat: "中文", q: "草原上有三(  )老牛在吃草。", opt: ["個", "隻", "頭", "條"], ans: 2, note: "體型較大的牲畜用「頭」。", tips: "區分大體型動物（頭）與小體型（隻）。" },
@@ -220,7 +220,7 @@
     { cat: "中文", q: "一(  )黃葉從樹上掉下來。", opt: ["片", "張", "個", "條"], ans: 0, note: "輕薄平整的物體用「片」。", tips: "測試觀察力。" },
     { cat: "中文", q: "農夫牽著一(  )大象。", opt: ["頭", "隻", "個", "條"], ans: 0, note: "大型動物用「頭」。", tips: "測試體型分類。" },
 
-    // 食物與容器類
+    // --- 類別 ：食物與容器類
     { cat: "中文", q: "我要買一(  )牛奶。", opt: ["瓶", "個", "隻", "條"], ans: 0, note: "瓶裝容器用「瓶」。", tips: "容器量詞。" },
     { cat: "中文", q: "桌上有一(  )蛋糕。", opt: ["個", "條", "塊", "件"], ans: 2, note: "切開的小塊食物用「塊」。", tips: "切割物體量詞。" },
     { cat: "中文", q: "媽媽煮了一(  )香噴噴的飯。", opt: ["個", "碗", "瓶", "粒"], ans: 1, note: "容器作為量詞用「碗」。", tips: "飲食場景常用。" },
@@ -231,7 +231,7 @@
     { cat: "中文", q: "這(  )香蕉很甜。", opt: ["隻", "條", "隻", "把"], ans: 1, note: "單根香蕉用「條」。", tips: "水果量詞。" },
     { cat: "中文", q: "那一(  )葡萄還沒熟。", opt: ["個", "枝", "串", "粒"], ans: 2, note: "成串的物體用「串」。", tips: "群組物體量詞。" },
 
-    // 交通、建築與物件類
+    // --- 類別 ：交通、建築與物件類
     { cat: "中文", q: "馬路上有一(  )巴士。", opt: ["A. 個", "B. 輛", "C. 部", "以上 B 和 C 皆可"], ans: 3, note: "車輛量詞可用「輛」或「部」。", tips: "交通工具通用量詞。" },
     { cat: "中文", q: "天上有三(  )直升機。", opt: ["隻", "架", "輛", "部"], ans: 1, note: "飛機類用「架」。", tips: "航空工具特定量詞。" },
     { cat: "中文", q: "我家附近有一(  )圖書館。", opt: ["A. 個", "B. 座", "C. 間", "以上 B 和 C 皆可"], ans: 3, note: "建築物可用「間」或「座」（較大型）。", tips: "建築空間量詞。" },
@@ -243,7 +243,7 @@
     { cat: "中文", q: "這(  )電視機壞了。", opt: ["部", "架", "個", "隻"], ans: 0, note: "機器、電器用「部」。", tips: "電器量詞。" },
     { cat: "中文", q: "教室裡有一(  )黑板。", opt: ["張", "面", "塊", "個"], ans: 1, note: "扁平且廣闊的平面用「面」或「塊」。", tips: "校園環境量詞。" },
 
-    // 其他與抽象類
+    // --- 類別 ：其他與抽象類
     { cat: "中文", q: "老師講了一個(  )道理。", opt: ["個", "番", "次", "場"], ans: 1, note: "言語或理論用「番」。", tips: "高階抽象量詞。" },
     { cat: "中文", q: "我看了一(  )精彩的電影。", opt: ["場", "個", "次", "部"], ans: 3, note: "完整的影音作品用「部」。", tips: "作品量詞。" },
     { cat: "中文", q: "這是一(  )很難的題目。", opt: ["個", "道", "枝", "條"], ans: 1, note: "問題、工序用「道」。", tips: "學業場景量詞。" },
@@ -507,7 +507,7 @@
     { cat: "中文", q: "請排列出通順的句子：①跳舞 ②妹妹 ③跟著 ④音樂", opt: ["②③④①", "④③②①", "①②③④", "③④②①"], ans: 0, note: "妹妹跟著音樂跳舞。", tips: "連貫動作練習。" },
     { cat: "中文", q: "請排列出通順的句子：①小狗 ②玩耍 ③草地上 ④在", opt: ["①④③②", "③④①②", "②①④③", "①②③④"], ans: 0, note: "小狗在草地上玩耍。", tips: "基礎場景描述。" },
 
-    // 進階重組：加入時間、形容詞或連詞 (10題)
+    // --- 類別 ：進階重組：加入時間、形容詞或連詞 (10題)
     { cat: "中文", q: "請排列：①早上 ②上學 ③我 ④背著書包", opt: ["①③④②", "③①②④", "④②③①", "①②③④"], ans: 0, note: "早上我背著書包上學。", tips: "時間狀語通常放在句首或主語後。" },
     { cat: "中文", q: "請排列：①紅色的 ②有一輛 ③玩具車 ④桌上", opt: ["④②①③", "①③②④", "②①③④", "③②①④"], ans: 0, note: "桌上有一輛紅色的玩具車。", tips: "測試「地點+有+形容詞+名詞」。" },
     { cat: "中文", q: "請排列：①回家 ②才 ③做完功課 ④我", opt: ["④③②①", "①②③④", "③④②①", "②①③④"], ans: 0, note: "我做完功課才回家。", tips: "測試「才」的邏輯順序。" },
@@ -519,7 +519,7 @@
     { cat: "中文", q: "請排列：①五光十色的 ②燈光 ③夜裡 ④有", opt: ["③④①②", "①②③④", "④③①②", "②①③④"], ans: 0, note: "夜裡有五光十色的燈光。", tips: "高階詞彙搭配。" },
     { cat: "中文", q: "請排列：①聰明的 ②是一個 ③小明 ④孩子", opt: ["③②①④", "①④③②", "②①④③", "④③②①"], ans: 0, note: "小明是一個聰明的孩子。", tips: "測試定語從句。" },
 
-    // 邏輯改錯與語法辨析 (10題)
+    // --- 類別 ：邏輯改錯與語法辨析 (10題)
     { cat: "中文", q: "選出排列最通順的句子：", opt: ["我吃飯喜歡紅色的", "我喜歡吃紅色的蘋果", "紅色的蘋果我吃喜歡", "喜歡我吃紅色的蘋果"], ans: 1, note: "主謂賓完整。", tips: "測試語感。" },
     { cat: "中文", q: "哪句話的意思是正確的？", opt: ["我把書包背在腳上", "我把帽子戴在頭上", "我把鞋子穿在手上", "我把手錶戴在眼上"], ans: 1, note: "常識與動詞搭配。", tips: "測試對穿戴動詞的理解。" },
     { cat: "中文", q: "「媽媽 煮了 晚餐 辛苦地」。請選出正確順序：", opt: ["媽媽辛苦地煮了晚餐", "晚餐辛苦地煮了媽媽", "辛苦地晚餐煮了媽媽", "媽媽煮了辛苦地晚餐"], ans: 0, note: "形容動作的詞要放在動作前。", tips: "修飾語位置。" },
@@ -559,26 +559,26 @@
     { cat: "數學", q: "從左邊數起，蘋果排第 5；從右邊數起，蘋果排第 1。這排共有幾個水果？", opt: ["4 個", "5 個", "6 個", "7 個"], ans: 1, note: "5 + 1 - 1 = 5。其實就是排最後一個。", tips: "多向數數邏輯。" },
     { cat: "數學", q: "小明排在第 12 個，他前面的人排第幾？", opt: ["第 11", "第 12", "第 13", "第 1"], ans: 0, note: "前面的位次少 1。", tips: "數序基礎。" },
 
-    // --- 中文細心度與語感 ---
+    // --- 類別 ：--- 中文細心度與語感 ---
     { cat: "中文", q: "選出沒有錯別字的句子：", opt: ["今天天氣很晴郎。", "今天天氣很晴朗。", "今天天氣很精朗。", "今天天氣很清朗。"], ans: 1, note: "字形辨析。區分「朗、郎、精、清」。", tips: "名校考小朋友是否會寫「懶字」，即少了一劃或偏旁錯誤。" },
     { cat: "中文", q: "「小明在圖書館裡安靜地閱讀。」這句話中，哪一個是【動作】？", opt: ["小明", "圖書館", "安靜", "閱讀"], ans: 3, note: "詞性認知。閱讀是動詞。", tips: "測試小朋友對句子結構的拆解能力。" },
     { cat: "中文", q: "「弟弟不小心打碎了花瓶，他感到很(  )。」", opt: ["開朗", "難過", "興奮", "得意"], ans: 1, note: "詞彙運用。根據情境選擇心情詞彙。", tips: "測試同理心與情境聯想。" },
 
-// --- 中文擴充 (邏輯與量詞) ---
+// --- 類別 ：--- 中文擴充 (邏輯與量詞) ---
     { cat: "中文", q: "「媽媽買了一(  )新衣服送給我。」", opt: ["條", "件", "個", "張"], ans: 1, note: "衣服用「件」，褲子或裙子用「條」。", tips: "測試量詞分類概念。" },
     { cat: "中文", q: "選出寫法正確的詞語：", opt: ["朋友", "明友", "崩友", "月友"], ans: 0, note: "區分「朋」與「明」。", tips: "形近字是首輪必考題。" },
     { cat: "中文", q: "小明對爸爸說：「我想去公園玩。」這句話是誰說的？", opt: ["爸爸", "小明", "老師", "媽媽"], ans: 1, note: "考查閱讀理解中的角色關係。", tips: "測試對主語的理解。" },
     { cat: "中文", q: "選出排列通順的句子：①吃飯 ②大家 ③洗手 ④後 ⑤先", opt: ["②⑤③④①", "②⑤①④③", "③④①⑤②", "⑤③④①②"], ans: 0, note: "大家先洗手後吃飯。", tips: "測試動作先後順序邏輯。" },
     { cat: "中文", q: "哪一組詞語是反義詞（意思相反）？", opt: ["美麗/漂亮", "高大/矮小", "快樂/開心", "跳舞/唱歌"], ans: 1, note: "考察對形容詞詞義的理解。", tips: "名校常考相反詞概念。" },
 
-    // --- English Expansion (Grammar & Vocabulary) ---
+    // --- 類別 ：--- English Expansion (Grammar & Vocabulary) ---
     { cat: "English", q: "A ______ is an animal with long ears and hops.", opt: ["Dog", "Cat", "Rabbit", "Horse"], ans: 2, note: "Animal features: long ears and hopping.", tips: "Check if child knows 'hops'." },
     { cat: "English", q: "I ______ my teeth every morning.", opt: ["wash", "brush", "clean", "comb"], ans: 1, note: "Collocation: 'brush' teeth.", tips: "Common daily action vocabulary." },
     { cat: "English", q: "The pencil is ______ the pencil case.", opt: ["on", "under", "in", "behind"], ans: 2, note: "Preposition for objects inside a container.", tips: "Spatial awareness in English." },
     { cat: "English", q: "How many legs does a spider have?", opt: ["Four", "Six", "Eight", "Ten"], ans: 2, note: "General knowledge in English.", tips: "Tests both number words and nature facts." },
     { cat: "English", q: "I have a ______. It is sour and yellow.", opt: ["Apple", "Orange", "Lemon", "Banana"], ans: 2, note: "Vocabulary: Colors and tastes.", tips: "Check if child connects 'sour' with 'lemon'." },
 
-// --- 中文能力 (15題) ---
+// --- 類別 ：--- 中文能力 (15題) ---
     { cat: "中文", q: "選出不屬於同類的詞語：", opt: ["醫生", "護士", "病人", "警察"], ans: 2, note: "職業 vs 身份。前三者與醫療有關，但「病人」不是職業。", tips: "測試分類的邏輯嚴謹度。" },
     { cat: "中文", q: "哪一組詞語的配對是【正確】的？", opt: ["一頂手錶", "一對襪子", "一枝雨傘", "一張剪刀"], ans: 1, note: "量詞運用。「對/雙」用於成對物品。", tips: "名校常考配件類量詞。" },
     { cat: "中文", q: "「哥哥正在客廳裡(  )鋼琴。」", opt: ["玩", "彈", "拉", "吹"], ans: 1, note: "動詞搭配。鋼琴用「彈」。", tips: "測試樂器動詞。" },
@@ -595,7 +595,7 @@
     { cat: "中文", q: "選出「不正確」的寫法：", opt: ["心青", "心情", "晴天", "清秀"], ans: 0, note: "同音字辨析。「心情」的「情」是心部。", tips: "形近同音字是重點。" },
     { cat: "中文", q: "「弟弟在公園裡(  )皮球。」", opt: ["打", "拍", "踢", "以上皆可"], ans: 3, note: "球類動詞的通用性。", tips: "測試思維靈活性。" },
 
-    // --- English Expansion (15題) ---
+    // --- 類別 ：--- English Expansion (15題) ---
     { cat: "English", q: "Which animal can swim and has a shell?", opt: ["Fish", "Turtle", "Bird", "Rabbit"], ans: 1, note: "Animal traits.", tips: "Check 'shell' vocabulary." },
     { cat: "English", q: "I use a ______ to cut paper.", opt: ["Pencil", "Ruler", "Scissors", "Eraser"], ans: 2, note: "Tool functions.", tips: "Scissors is always plural." },
     { cat: "English", q: "The sun is ______ the sky.", opt: ["at", "in", "on", "under"], ans: 1, note: "Preposition 'in the sky'.", tips: "Common preposition error." },
@@ -612,7 +612,7 @@
     { cat: "English", q: "There ______ an apple on the table.", opt: ["is", "are", "am", "be"], ans: 0, note: "Grammar: There is/are.", tips: "Singular vs Plural." },
     { cat: "English", q: "A baby cat is called a ______.", opt: ["Puppy", "Kitten", "Chick", "Cub"], ans: 1, note: "Animal babies.", tips: "Advanced animal vocabulary." },
 
-    // --- 數學與邏輯 (15題) ---
+    // --- 類別 ：--- 數學與邏輯 (15題) ---
     { cat: "數學", q: "10 減去幾多等於 4？", opt: ["4", "5", "6", "7"], ans: 2, note: "10 - 6 = 4。", tips: "逆向減法思維。" },
     { cat: "數學", q: "三角形有幾多個角？", opt: ["2", "3", "4", "5"], ans: 1, note: "圖形基本屬性。", tips: "認識邊與角。" },
     { cat: "數學", q: "小明有 5 粒糖，姐姐比他多 2 粒，兩個人一共有幾粒？", opt: ["7 粒", "10 粒", "12 粒", "15 粒"], ans: 2, note: "兩步運算：5 + (5+2) = 12。", tips: "陷阱在於要算「總和」。" },
@@ -629,21 +629,21 @@
     { cat: "數學", q: "圓形有幾多條邊？", opt: ["0", "1", "4", "無數"], ans: 0, note: "圖形定義。圓形沒有直邊（角）。", tips: "區分曲線與直線。" },
     { cat: "數學", q: "小明有 20 元，買了一枝 5 元的筆，還剩幾多錢？", opt: ["5 元", "10 元", "15 元", "20 元"], ans: 2, note: "20以內減法應用。", tips: "金錢運算。" },
 
-    // --- 禮儀與常識 (5題) ---
+    // --- 類別 ：--- 禮儀與常識 (5題) ---
     { cat: "禮儀", q: "在走廊跑步撞到同學，應該？", opt: ["快點跑開", "大聲笑他", "扶起同學並道歉", "罵同學不看路"], ans: 2, note: "社交禮儀與責任感。", tips: "名校看重品格。" },
     { cat: "常識", q: "哪一種物體會浮在水面？", opt: ["鐵釘", "石頭", "木頭", "硬幣"], ans: 2, note: "科學常識：浮力。", tips: "基礎常識認知。" },
     { cat: "禮儀", q: "回答老師問題時，應該：", opt: ["低頭細聲說", "看著老師大聲說", "轉過頭說", "不說話"], ans: 1, note: "溝通禮儀。", tips: "自信與眼神接觸。" },
     { cat: "常識", q: "醫生用什麼工具聽我們的心跳？", opt: ["梳子", "聽診器", "放大鏡", "手錶"], ans: 1, note: "職業工具常識。", tips: "擴展生活詞彙。" },
     { cat: "禮儀", q: "去面試時，穿什麼最合適？", opt: ["睡衣", "乾淨整齊的校服/便服", "泳衣", "污糟的衣服"], ans: 1, note: "場合禮儀。", tips: "建立儀容意識。" },
 
-    // --- 數學擴充 (兩步運算與空間) ---
+    // --- 類別 ：--- 數學擴充 (兩步運算與空間) ---
     { cat: "數學", q: "17 - 9 = ?", opt: ["7", "8", "9", "6"], ans: 1, note: "退位減法。", tips: "觀察是否能在5秒內心算出結果。" },
     { cat: "數學", q: "小明排隊排第5，小紅排小明後面一個，小紅排第幾？", opt: ["第 4", "第 5", "第 6", "第 7"], ans: 2, note: "序數邏輯題。", tips: "測試對前後順序與數字的關係。" },
     { cat: "數學", q: "一個正方體有幾多個面？", opt: ["4 個", "6 個", "8 個", "12 個"], ans: 1, note: "立體幾何基本常識。", tips: "空間感測試。" },
     { cat: "數學", q: "找規律：1, 3, 5, 7, ( )", opt: ["8", "9", "10", "11"], ans: 1, note: "單數規律遞增。", tips: "測試數列邏輯。" },
     { cat: "數學", q: "小紅有 8 粒糖，小明比她多 3 粒。小明有幾粒？", opt: ["5 粒", "8 粒", "11 粒", "13 粒"], ans: 2, note: "比較應用題：8 + 3 = 11。", tips: "測試對「多」和「少」的數學轉換。" },
 
-// --- 中文能力：字形與邏輯 (15題) ---
+// --- 類別 ：--- 中文能力：字形與邏輯 (15題) ---
     { cat: "中文", q: "選出寫法完全正確的詞語：", opt: ["休息", "休自", "體息", "體自"], ans: 0, note: "辨析「休/體」與「息/自」。", tips: "測試對字形細節的敏感度。" },
     { cat: "中文", q: "「明明(  )着書包去上學。」", opt: ["提", "背", "拿", "抱"], ans: 1, note: "書包通常用「背」(bēi)。", tips: "動作與名詞的精準搭配。" },
     { cat: "中文", q: "哪個字加上「口」字部首後會變成「唱」？", opt: ["昌", "日", "晶", "冒"], ans: 0, note: "字素組合拆解。", tips: "測試對漢字結構的理解。" },
@@ -660,7 +660,7 @@
     { cat: "中文", q: "哪一個字不是「左右結構」？", opt: ["好", "林", "苗", "忙"], ans: 2, note: "「苗」是上下結構。", tips: "測試漢字構字法。" },
     { cat: "中文", q: "「爸爸(  )着報紙。」", opt: ["看", "讀", "閱", "以上皆可"], ans: 3, note: "多個動詞的適用性。", tips: "測試思維靈活性。" },
 
-    // --- English: Grammar & Observation (15題) ---
+    // --- 類別 ：--- English: Grammar & Observation (15題) ---
     { cat: "English", q: "Which one is a vegetable?", opt: ["Banana", "Grape", "Carrot", "Peach"], ans: 2, note: "Food categories.", tips: "Distinguish fruits and vegetables." },
     { cat: "English", q: "I have two ______.", opt: ["ear", "ears", "a ear", "an ear"], ans: 1, note: "Plural nouns.", tips: "Check plural 's'." },
     { cat: "English", q: "The mouse is ______ the two boxes.", opt: ["on", "between", "under", "in"], ans: 1, note: "Preposition: 'between' (在兩者之間).", tips: "Spatial logic." },
@@ -677,7 +677,7 @@
     { cat: "English", q: "We see with our ______.", opt: ["Ears", "Nose", "Eyes", "Hands"], ans: 2, note: "Body parts and senses.", tips: "Vocabulary: Eyes." },
     { cat: "English", q: "Which one is a 'Toy'?", opt: ["Milk", "Doll", "Bread", "Chair"], ans: 1, note: "Classification.", tips: "Vocabulary: Doll." },
 
-    // --- 數學與邏輯：數量、空間、代換 (15題) ---
+    // --- 類別 ：--- 數學與邏輯：數量、空間、代換 (15題) ---
     { cat: "數學", q: "一個正方形紙盒有幾個面？", opt: ["4", "5", "6", "8"], ans: 2, note: "立體圖形常識。", tips: "測試空間感。" },
     { cat: "數學", q: "小明比小紅高，小明比小強矮。誰最矮？", opt: ["小明", "小紅", "小強", "不確定"], ans: 1, note: "比較邏輯：小強 > 小明 > 小紅。", tips: "測試逆向比較邏輯。" },
     { cat: "數學", q: "現在是 10 點，時針和分針重疊在一起嗎？", opt: ["是", "不是", "不確定", "只有分針動"], ans: 1, note: "時鐘觀察。12點才重疊。", tips: "測試對時鐘盤面的想像力。" },
@@ -694,7 +694,7 @@
     { cat: "數學", q: "正方形有幾個直角？", opt: ["1", "2", "3", "4"], ans: 3, note: "圖形屬性。", tips: "幾何基礎。" },
     { cat: "數學", q: "16 減幾多等於 10？", opt: ["4", "5", "6", "7"], ans: 2, note: "16 - 6 = 10。", tips: "逆向計算。" },
 
-// --- 數學：天平、分配與進階邏輯 (15題) ---
+// --- 類別 ：--- 數學：天平、分配與進階邏輯 (15題) ---
     { cat: "數學", q: "天平左邊有 1 個西瓜，右邊有 3 個菠蘿，天平平衡。請問 2 個西瓜等於幾個菠蘿？", opt: ["3 個", "4 個", "6 個", "9 個"], ans: 2, note: "倍數代換。1=3, 2=6。", tips: "測試等量代換的連動邏輯。" },
     { cat: "數學", q: "天平左邊有 4 個蘋果，右邊有 2 個梨，天平平衡。請問 1 個梨等於幾個蘋果？", opt: ["1 個", "2 個", "3 個", "4 個"], ans: 1, note: "除法代換。4 除以 2 等於 2。", tips: "測試對平分概念的理解。" },
     { cat: "數學", q: "媽媽把 12 塊餅乾分給小明和小紅，每人要一樣多，每人分得幾塊？", opt: ["4 塊", "5 塊", "6 塊", "12 塊"], ans: 2, note: "12 分成兩份。6 + 6 = 12。", tips: "均分邏輯，常考 10 以上的分配。" },
@@ -711,7 +711,7 @@
     { cat: "數學", q: "小明比姐姐小 3 歲，姐姐今年 10 歲，小明明年幾歲？", opt: ["7 歲", "8 歲", "9 歲", "13 歲"], ans: 1, note: "兩步時間題。現在 10-3=7 歲，明年是 7+1=8 歲。", tips: "測試時間流逝的雙重邏輯。" },
     { cat: "數學", q: "哪一組圖形可以拼成一個正方形？", opt: ["A. 兩個圓形", "B. 兩個長方形", "C. 兩個三角形", "以上 B 或 C 皆可能"], ans: 3, note: "圖形拼合。兩個一樣的長方形或直角三角形都可拼成正方形。", tips: "測試幾何拼合想像力。" },
 
-    // --- 中文：短文閱讀理解 (15題) ---
+    // --- 類別 ：--- 中文：短文閱讀理解 (15題) ---
     { cat: "中文", q: "閱讀：「小狗汪汪住在小屋裡。牠最喜歡吃骨頭，不喜歡吃蘋果。」請問汪汪不喜歡吃什麼？", opt: ["肉骨頭", "蘋果", "小屋", "汪汪"], ans: 1, note: "直接提取訊息。", tips: "測試初步閱讀理解。" },
     { cat: "中文", q: "閱讀：「今天是小紅的生日，媽媽送她一本書，爸爸送她一個洋娃娃。」誰送了洋娃娃？", opt: ["小紅", "媽媽", "爸爸", "老師"], ans: 2, note: "角色與物件配對。", tips: "測試細心度。" },
     { cat: "中文", q: "閱讀：「公園裡有紅色的花，也有黃色的花。蝴蝶在紅花上跳舞。」蝴蝶在哪裡？", opt: ["黃花上", "紅花上", "樹上", "草地上"], ans: 1, note: "顏色與地點配對。", tips: "排除干擾顏色項。" },
@@ -728,7 +728,7 @@
     { cat: "中文", q: "閱讀：「早上，太陽出來了。公雞喔喔叫，叫醒了大姐姐。」誰叫醒了姐姐？", opt: ["太陽", "公雞", "媽媽", "大哥哥"], ans: 1, note: "因果關係與角色。", tips: "測試邏輯歸因。" },
     { cat: "中文", q: "哪一個是「中秋節」會吃的東西？", opt: ["粽子", "月餅", "年糕", "湯圓"], ans: 1, note: "節日文化常識。", tips: "面試常考節慶認知。" },
 
-    // --- English: Reading & Structures (15題) ---
+    // --- 類別 ：--- English: Reading & Structures (15題) ---
     { cat: "English", q: "Read: 'Ben has a blue bike. He rides it to school.' What color is the bike?", opt: ["Red", "Blue", "Green", "School"], ans: 1, note: "Detail retrieval.", tips: "Simple reading check." },
     { cat: "English", q: "Read: 'The cat is on the mat. The dog is under the table.' Where is the dog?", opt: ["On the mat", "In the box", "Under the table", "On the chair"], ans: 2, note: "Spatial information retrieval.", tips: "Check if child mixes up 'cat' and 'dog'." },
     { cat: "English", q: "Read: 'It is rainy. I need my umbrella.' What is the weather like?", opt: ["Sunny", "Rainy", "Windy", "Cold"], ans: 1, note: "Contextual understanding.", tips: "Vocabulary: Weather." },
@@ -745,14 +745,14 @@
     { cat: "English", q: "What is the opposite of 'Up'?", opt: ["Left", "Right", "Down", "In"], ans: 2, note: "Opposites.", tips: "Spatial direction." },
     { cat: "English", q: "Which one is a 'Family member'?", opt: ["Teacher", "Friend", "Sister", "Doctor"], ans: 2, note: "Categories: Family.", tips: "Vocabulary: Sister." },
 
-    // --- 常識與面試心理 (5題) ---
+    // --- 類別 ：--- 常識與面試心理 (5題) ---
     { cat: "常識", q: "如果老師問你一個你完全不會的問題，你應該？", opt: ["不說話一直等", "哭", "誠實說：老師我不肯定，請你教我", "隨便指一個東西"], ans: 2, note: "應變能力與態度。", tips: "名校喜歡誠實且有求知欲的孩子。" },
     { cat: "常識", q: "我們應該在什麼時候刷牙？", opt: ["睡覺時", "洗澡時", "早晚各一次", "不用刷牙"], ans: 2, note: "個人衛生常識。", tips: "生活習慣測試。" },
     { cat: "禮儀", q: "小組遊戲時，有個小朋友想玩你的玩具，你應該？", opt: ["大聲叫他不准碰", "把玩具藏起來", "和他一起分享玩", "推開他"], ans: 2, note: "社交分享禮儀。", tips: "測試團隊協作能力。" },
     { cat: "常識", q: "哪一種感官讓我們知道花很香？", opt: ["視覺(眼)", "聽覺(耳)", "嗅覺(鼻)", "味覺(舌)"], ans: 2, note: "五感認知。", tips: "科學基礎。" },
     { cat: "禮儀", q: "坐下時，正確的姿勢是？", opt: ["搖晃椅子", "翹起二郎腿", "背部挺直雙手放膝蓋", "趴在桌上"], ans: 2, note: "面試儀態。", tips: "測試自我克制與禮貌。" },
 
-    // --- 禮儀與常識 (5題) ---
+    // --- 類別 ：--- 禮儀與常識 (5題) ---
     { cat: "禮儀", q: "面試時如果聽不清楚老師的題目，應該？", opt: ["不回答", "隨便猜一個", "禮貌地說：請老師再說一次", "看旁邊的小朋友"], ans: 2, note: "溝通禮儀。", tips: "測試解決問題的態度。" },
     { cat: "常識", q: "植物生長不需要什麼？", opt: ["水", "陽光", "泥土", "果汁"], ans: 3, note: "基本科學常識。", tips: "排除干擾項。" },
     { cat: "禮儀", q: "進入面試室前應該？", opt: ["衝進去", "先敲門", "直接坐下", "大聲喊叫"], ans: 1, note: "社交禮儀基本功。", tips: "觀察小朋友的行為習慣。" },
@@ -769,7 +769,7 @@
     { cat: "邏輯", q: "一隻蝸牛要爬上 5 米高的牆，白天爬 3 米，晚上滑下 2 米。它第幾天能爬到頂？", opt: ["2 天", "3 天", "4 天", "5 天"], ans: 1, note: "第一天剩2米，第二天爬到5米就到頂了，不會再滑下。", tips: "經典邏輯陷阱題。" },
     { cat: "English", q: "If yesterday was Friday, what day is the day after tomorrow?", opt: ["Sunday", "Monday", "Tuesday", "Wednesday"], ans: 1, note: "Yesterday Friday -> Today Saturday -> Tomorrow Sunday -> Day after tomorrow Monday.", tips: "時間推算邏輯。" },
     
-    // 2. CKY 專項：雙語轉換與創意探究 (20題)
+    // --- 類別 ：2. CKY 專項：雙語轉換與創意探究 (20題)
     { cat: "English", q: "If a bird has wings, a fish has ______.", opt: ["legs", "fins", "arms", "tails"], ans: 1, note: "Analogy (類比) 練習。", tips: "CKY 喜歡考單字間的邏輯關係。" },
     { cat: "邏輯", q: "這是一個影子，它的形狀像圓形，但它的主人是一支筆。這可能嗎？", opt: ["可能，從頂部照光", "不可能", "影子一定是長方形", "影子是紅色的"], ans: 0, note: "多角度觀察。", tips: "CKY 考察孩子的探究精神。" },
     { cat: "常識", q: "當你在圖書館看到有人在大聲說話，你應該？", opt: ["跟著大聲說話", "安靜地走開", "輕聲提醒他要保持安靜", "叫保安把他趕走"], ans: 2, note: "情商與社交禮儀。", tips: "CKY 重視孩子的品格與溝通能力。" },
@@ -777,30 +777,30 @@
     { cat: "邏輯", q: "把一張正方形紙對折兩次後剪掉一個角，展開後是什麼樣子？", opt: ["中間有一個洞", "四個角都沒了", "變成了圓形", "沒有變化"], ans: 0, note: "空間想像力。", tips: "視覺化操作邏輯。" },
     { cat: "中文", q: "「畫蛇添足」是形容做事情怎樣？", opt: ["做得很快", "做得很完美", "做了多餘的事", "做得很慢"], ans: 2, note: "簡單成語寓意。", tips: "CKY 有時會涉及故事寓意理解。" },
 
-    // 3. 跨學科綜合：記憶與反應 (10題)
+    // --- 類別 ：3. 跨學科綜合：記憶與反應 (10題)
     { cat: "邏輯", q: "找規律：1A, 2B, 3C, (  )", opt: ["4D", "3D", "4C", "5E"], ans: 0, note: "數字與字母雙重遞增。", tips: "綜合序列邏輯。" },
     { cat: "English", q: "A person who helps sick people in a hospital is a ______.", opt: ["Teacher", "Farmer", "Doctor", "Pilot"], ans: 2, note: "Occupation logic.", tips: "職業認知。" },
 
 
-    // --- 禮儀與常識 ---
+    // --- 類別 ：--- 禮儀與常識 ---
     { cat: "禮儀", q: "在巴士上見到老人家沒有位坐，你應該？", opt: ["大聲叫他", "假裝睡覺", "讓出座位", "自己繼續坐"], ans: 2, note: "社交價值觀與禮儀。", tips: "名校非常看重孩子的同理心。" },
     { cat: "常識", q: "過馬路時，看到什麼顏色燈號才可橫過？", opt: ["紅燈", "黃燈", "綠燈", "閃動紅燈"], ans: 2, note: "基本交通安全常識。", tips: "面試常考生活安全題。" },
 
-    // 中文題目區
+    // --- 類別 ：中文題目區
     { cat: "中文", q: "「小明今天穿上乾淨的校服，快快樂樂地去上(  )。」", opt: ["覺", "字", "學", "孝"], ans: 2, note: "考查形近字辨析。", tips: "觀察孩子是否能分辨字的細微差異。" },
     { cat: "中文", q: "魚缸裡有三(  )小魚在游水。", opt: ["隻", "條", "頭", "顆"], ans: 1, note: "精準量詞：細長物體用「條」。", tips: "測試語法精準度。" },
     { cat: "中文", q: "選出排列通順的句子：①喜歡 ②玩 ③我 ④和 ⑤姐姐 ⑥皮球", opt: ["③①②④⑤⑥", "③④⑤①②⑥", "⑤④③①②⑥", "③①④⑤②⑥"], ans: 1, note: "句子結構邏輯。", tips: "正確為「我和姐姐喜歡玩皮球」。" },
     { cat: "中文", q: "老師說：「先洗手，然後吃飯，最後收拾。」第一個動作是？", opt: ["吃飯", "洗手", "收拾", "睡覺"], ans: 1, note: "考查「先」的序列。", tips: "聽力指令提取能力。" },
     { cat: "中文", q: "選出寫法正確的詞語：", opt: ["太楊", "太陽", "大陽", "太腸"], ans: 1, note: "形近字辨析。", tips: "細心度測試。" },
     
-    // 英文題目區
+    // --- 類別 ：英文題目區
     { cat: "English", q: "Which animal has a very long neck?", opt: ["Lion", "Giraffe", "Monkey", "Zebra"], ans: 1, note: "Vocabulary: Animal features.", tips: "Check if child knows 'neck'." },
     { cat: "English", q: "The bird is flying ______ the sky.", opt: ["on", "in", "under", "behind"], ans: 1, note: "Prepositions: 'in' the sky.", tips: "Basic spatial preposition." },
     { cat: "English", q: "Look! The cat ______ on the sofa now.", opt: ["is sleeping", "sleep", "sleeps", "sleeping"], ans: 0, note: "Present Continuous tense.", tips: "Check 'is' + 'v-ing' structure." },
     { cat: "English", q: "We have two ______.", opt: ["eye", "eyes", "a eye", "eyeses"], ans: 1, note: "Plural nouns.", tips: "Check if child notices singular/plural." },
     { cat: "English", q: "Which place is for buying medicine?", opt: ["Bakery", "Library", "Pharmacy", "Park"], ans: 2, note: "Community places.", tips: "Common life vocabulary." },
 
-    // 數學題目區
+    // --- 類別 ：數學題目區
     { cat: "數學", q: "7 + 6 = ?", opt: ["12", "13", "14", "15"], ans: 1, note: "進位加法。", tips: "建議訓練心算速度。" },
     { cat: "數學", q: "15 - 8 = ?", opt: ["6", "7", "8", "9"], ans: 1, note: "退位減法。", tips: "測試減法準確度。" },
     { cat: "數學", q: "圖形規律：🔵 🔴 🔵 🔴 🔵 (  )", opt: ["🔵", "🔴", "🟡", "🟢"], ans: 1, note: "ABAB交替規律。", tips: "邏輯觀察力。" },
@@ -808,7 +808,7 @@
     { cat: "數學", q: "長方形有幾多條邊？", opt: ["3", "4", "5", "6"], ans: 1, note: "幾何基礎知識。", tips: "認識基本圖形屬性。" },
 
 
-// 中文類 (20題)
+// --- 類別 ：中文類 (20題)
     { cat: "常識", q: "選出不屬於同類的動物：", opt: ["獅子", "老虎", "斑馬", "貓咪"], ans: 3, note: "貓咪是寵物/家畜，其餘是野生動物。", tips: "測試野生與家養動物分類。" },
     { cat: "常識", q: "哪一種動物的出生方式與其他不同？", opt: ["雞", "鴨", "貓", "企鵝"], ans: 2, note: "貓是胎生，其餘是卵生（生蛋）。", tips: "測試生物繁殖概念。" },
     { cat: "常識", q: "選出不屬於同類的海洋生物：", opt: ["鯨魚", "海豚", "鯊魚", "金魚"], ans: 3, note: "金魚是淡水魚，其餘多見於海洋。", "tips": "測試棲息地分類。" },
@@ -830,7 +830,7 @@
     { cat: "常識", q: "選出不屬於動物居住的地方：", opt: ["蜂巢", "狗屋", "鳥巢", "餐廳"], ans: 3, note: "餐廳是人吃飯的地方。", tips: "測試棲息地概念。" },
     { cat: "常識", q: "哪一個不屬於傳統節日食物？", opt: ["月餅", "粽子", "年糕", "漢堡包"], ans: 3, note: "漢堡包是日常快餐。", tips: "測試文化常識。" },
 
-    // English Category (20 Questions)
+    // --- 類別 ：English Category (20 Questions)
     { cat: "English", q: "Choose the odd one out:", opt: ["Dog", "Cat", "Lion", "Rabbit"], ans: 2, note: "Lion is a wild animal; others are common pets.", tips: "Vocabulary & Classification." },
     { cat: "English", q: "Select the word that does NOT belong:", opt: ["Bird", "Bee", "Butterfly", "Ant"], ans: 3, note: "Ant cannot fly; others can.", tips: "Testing knowledge of movement." },
     { cat: "English", q: "Which animal lives in a different habitat?", opt: ["Fish", "Octopus", "Whale", "Monkey"], ans: 3, note: "Monkey lives on land; others live in water.", tips: "Environment classification." },
@@ -852,25 +852,24 @@
     { cat: "English", q: "Which one is NOT a taste?", opt: ["Sweet", "Sour", "Loud", "Salty"], ans: 2, note: "Loud is related to sound.", tips: "Sensory vocabulary." },
     { cat: "English", q: "Which one is NOT a solid material?", opt: ["Wood", "Paper", "Metal", "Water"], ans: 3, note: "Water is a liquid.", tips: "Physical properties." },
         
-        // 排隊陷阱
+        // --- 類別 ：排隊陷阱
         { cat: "邏輯", q: "小明排隊買冰淇淋，從前面數起他排第 5，從後面數起他也排第 5。這一隊共有幾人？", opt: ["10 人", "9 人", "8 人", "11 人"], ans: 1, note: "5 + 5 - 1 = 9，因為小明被數了兩次。", tips: "注意重複計算小明。" },
         { cat: "邏輯", q: "小方排第 4，小強排第 8。請問小方和小強中間隔了幾個小朋友？", opt: ["4 個", "3 個", "5 個", "2 個"], ans: 1, note: "第 5, 6, 7 個在中間，共 3 個。", tips: "「中間」不含頭尾。" },
-        // 常識類
+        // --- 類別 ：常識類
         { cat: "常識", q: "香港的區徽上有一朵什麼花？", opt: ["玫瑰", "紫荊花", "向日葵", "鬱金香"], ans: 1, note: "洋紫荊是香港代表花卉。", tips: "身份認知常識。" },
         { cat: "常識", q: "端午節我們會吃哪種食物並觀看龍舟比賽？", opt: ["月餅", "粽子", "年糕", "湯圓"], ans: 1, note: "端午節食粽。", tips: "節日與食物配對。" },
-        // 分配類
+        // --- 類別 ：分配類
         { cat: "數學", q: "有 13 個小朋友坐船，每隻船限坐 6 人，至少需要幾隻船？", opt: ["2 隻", "3 隻", "4 隻", "1 隻"], ans: 1, note: "6+6=12，餘下 1 人也要多一隻船。", tips: "這是「進一法」邏輯題。" },
         { cat: "數學", q: "小明有 5 粒糖，小紅有 3 粒糖。小明要給小紅幾粒，兩人的糖才一樣多？", opt: ["1 粒", "2 粒", "3 粒", "4 粒"], ans: 0, note: "5-1=4, 3+1=4。", tips: "移多補少思維。" },
-        // 英文類
+        // --- 類別 ：英文類
         { cat: "English", q: "The ice cream is cold, but the soup is ______.", opt: ["hot", "sweet", "big", "blue"], ans: 0, note: "Opposite of cold is hot.", tips: "測試相反詞對比。" },
         { cat: "English", q: "How many legs does a spider have?", opt: ["two", "four", "six", "eight"], ans: 3, note: "Spiders have 8 legs.", tips: "常識與數字結合。" },
-        // DGJS/CKY 專項
+        // --- 類別 ：DGJS/CKY 專項
         { cat: "邏輯", q: "1, 2, 4, 7, 11, (  )", opt: ["13", "14", "15", "16"], ans: 3, note: "間隔為 +1, +2, +3, +4, 下個是 +5。", tips: "DGJS 數列遞增規律。" },
         { cat: "English", q: "If a bird has wings, a fish has ______.", opt: ["legs", "fins", "arms", "tails"], ans: 1, note: "Bird-Wings; Fish-Fins.", tips: "CKY 類比邏輯。" },
-        // 重組句子
+        // --- 類別 ：重組句子
         { cat: "中文", q: "排列句子：①唱歌 ②在 ③小鳥 ④樹上", opt: ["③②④①", "④②③①", "①②③④", "③④②①"], ans: 0, note: "小鳥在樹上唱歌。", tips: "誰+在哪裡+做什麼。" },
-        // 聽力理解模擬
-        { cat: "聽力", q: "小松鼠帶蘋果，小鹿帶香蕉。誰負責帶香蕉？", opt: ["小松鼠", "小兔", "小鹿", "小熊"], ans: 2, note: "故事中提到小鹿帶香蕉。", tips: "人物與物件配對記憶。" }
+        
     ];
 
     // --- 遊戲狀態 ---
