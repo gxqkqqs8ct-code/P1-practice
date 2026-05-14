@@ -74,7 +74,8 @@
     { cat: "English", q: "I have four legs, I can bark, and I like to wag my tail. Who am I?", opt: ["A cat", "A dog", "A rabbit", "A bird"], ans: 1, note: "Riddle: Identifying an animal by its actions (bark, wag tail).", tips: "測試聽力理解與特徵聯想。" },
     { cat: "English", q: "Opposites: 'Clean' is to 'Dirty' as 'Full' is to ______.", opt: ["Hungry", "Empty", "Big", "Slow"], ans: 1, note: "Analogy (類比)。Full 的相反詞是 Empty。", tips: "這是名校高階考法，測試邏輯對應能力。" },
     { cat: "English", q: "Choose the correct sentence: (選出正確的句子)", opt: ["He like apples.", "He likes apples.", "He liking apples.", "He is like apples."], ans: 1, note: "Grammar: Subject-Verb Agreement (Third person singular).", tips: "雖然是小一，但名校首輪常考基礎語法細節。" },
-// --- 類別 1：數學天平代換 (6題) ---
+
+        // --- 類別 1：數學天平代換 (6題) ---
     { cat: "數學", q: "天平左邊有 1 個大西瓜，右邊有 4 個菠蘿，天平平衡。2 個大西瓜等於幾個菠蘿？", opt: ["4 個", "6 個", "8 個", "10 個"], ans: 2, note: "1=4, 2=8。", tips: "測試倍數概念。" },
     { cat: "數學", q: "天平左邊有 9 粒草莓，右邊有 3 隻香蕉，天平平衡。1 隻香蕉等於幾粒草莓？", opt: ["2 粒", "3 粒", "4 粒", "5 粒"], ans: 1, note: "9 除以 3 = 3。", tips: "測試除法分配邏輯。" },
     { cat: "數學", q: "2 個藍色積木和 1 個紅色積木一樣重。4 個藍色積木等於幾個紅色積木？", opt: ["1 個", "2 個", "3 個", "4 個"], ans: 1, note: "2=1, 4=2。", tips: "代換思維訓練。" },
@@ -90,14 +91,6 @@
     { cat: "中文", q: "閱讀：「春天到了，小草綠了，花兒開了。小朋友在草地上放風箏。」小朋友在做什麼？", opt: ["種花", "游泳", "放風箏", "睡覺"], ans: 2, note: "動作提取。", tips: "測試場景認知。" },
     { cat: "中文", q: "閱讀：「小方有兩隻貓，一隻叫大白，一隻叫小黑。大白愛睡覺，小黑愛跳舞。」誰愛跳舞？", opt: ["大白", "小方", "小黑", "小白"], ans: 2, note: "角色特徵配對。", tips: "測試名字與特徵的對應。" },
 
-    // --- 類別 2：分配與餘數邏輯 (6題) ---
-    { cat: "數學", q: "小麗有 13 粒糖，平均分給 2 個小朋友，最少剩下幾粒？", opt: ["0 粒", "1 粒", "2 粒", "6 粒"], ans: 1, note: "單數分給兩人必剩 1。", tips: "測試奇偶數認知。" },
-    { cat: "數學", q: "老師有 16 塊餅乾，平均分給 4 位同學，每人分得幾塊？", opt: ["2 塊", "4 塊", "6 塊", "8 塊"], ans: 1, note: "4+4+4+4=16。", tips: "平均分配練習。" },
-    { cat: "數學", q: "媽媽買了 10 個橘子，小明和小紅每人吃 4 個，還剩幾個？", opt: ["2 個", "4 個", "6 個", "8 個"], ans: 0, note: "10 - 4 - 4 = 2。", tips: "連續減法應用。" },
-    { cat: "數學", q: "小强有 20 元，想買 3 枝各 6 元的筆，錢夠嗎？還剩幾元？", opt: ["夠，剩 2 元", "夠，剩 4 元", "不夠", "夠，剩 10 元"], ans: 0, note: "3x6=18, 20-18=2。", tips: "兩步計算：乘法加減法。" },
-    { cat: "數學", q: "15 朵花插在 3 個花瓶裡，每個花瓶要一樣多，每瓶有幾朵？", opt: ["3 朵", "4 朵", "5 朵", "6 朵"], ans: 2, note: "15 分成 3 份是 5。", tips: "除法初步概念。" },
-    { cat: "數學", q: "盒子裡有 7 粒巧克力，小明吃了一半（不計餘數），還剩幾粒？", opt: ["3 粒", "4 粒", "5 粒", "2 粒"], ans: 1, note: "7的一半約是3，剩下4（或3）。通常考半數概念。", tips: "測試對「一半」的理解。" },
-
     // --- 類別 4：English Reading Substitution (6題) ---
     { cat: "English", q: "Read: 'Lily has a pink bag. There is a ruler and an eraser in it.' What is in the bag?", opt: ["A pen", "A ruler and an eraser", "A book", "A toy"], ans: 1, note: "Identify items.", tips: "Check object vocabulary." },
     { cat: "English", q: "Read: 'The sky is blue. The grass is green. The flowers are red.' What color is the grass?", opt: ["Blue", "Green", "Red", "Yellow"], ans: 1, note: "Color matching.", tips: "Basic color adjectives." },
@@ -105,7 +98,7 @@
     { cat: "English", q: "Read: 'My dog is big. My cat is small. They are friends.' Is the cat big?", opt: ["Yes", "No", "Maybe", "I don't know"], ans: 1, note: "Attribute check.", tips: "Check 'big' vs 'small' logic." },
     { cat: "English", q: "Read: 'It is sunny. Put on your hat. Let's go to the park.' What should you put on?", opt: ["Shoes", "A coat", "A hat", "A bag"], ans: 2, note: "Contextual advice.", tips: "Match weather to clothing." },
     { cat: "English", q: "Read: 'I see five ducks in the pond. Three are white, and two are yellow.' How many ducks are there?", opt: ["Two", "Three", "Five", "Eight"], ans: 2, note: "Number retrieval.", tips: "Summation/Total number check." },
-
+        
 // --- 類別：English Logic & Grammar (30題) ---
     // 1. 動詞與動作 (10題)
     { cat: "English", q: "Listen! The birds are ______ in the garden.", opt: ["singing", "sing", "sings", "sang"], ans: 0, note: "Present Continuous (正在進行)。", tips: "Listen/Look 是正在進行式的訊號詞。" },
@@ -436,14 +429,7 @@
 
 
 
-    // --- 類別 4：English Reading Substitution (6題) ---
-    { cat: "English", q: "Read: 'Lily has a pink bag. There is a ruler and an eraser in it.' What is in the bag?", opt: ["A pen", "A ruler and an eraser", "A book", "A toy"], ans: 1, note: "Identify items.", tips: "Check object vocabulary." },
-    { cat: "English", q: "Read: 'The sky is blue. The grass is green. The flowers are red.' What color is the grass?", opt: ["Blue", "Green", "Red", "Yellow"], ans: 1, note: "Color matching.", tips: "Basic color adjectives." },
-    { cat: "English", q: "Read: 'I am hungry. I want a sandwich. I don't want a cake.' What do I want?", opt: ["A cake", "A sandwich", "Water", "A pizza"], ans: 1, note: "Desire retrieval.", tips: "Check 'want' vs 'don't want'." },
-    { cat: "English", q: "Read: 'My dog is big. My cat is small. They are friends.' Is the cat big?", opt: ["Yes", "No", "Maybe", "I don't know"], ans: 1, note: "Attribute check.", tips: "Check 'big' vs 'small' logic." },
-    { cat: "English", q: "Read: 'It is sunny. Put on your hat. Let's go to the park.' What should you put on?", opt: ["Shoes", "A coat", "A hat", "A bag"], ans: 2, note: "Contextual advice.", tips: "Match weather to clothing." },
-    { cat: "English", q: "Read: 'I see five ducks in the pond. Three are white, and two are yellow.' How many ducks are there?", opt: ["Two", "Three", "Five", "Eight"], ans: 2, note: "Number retrieval.", tips: "Summation/Total number check." },
-
+    
 // --- 類別：香港地標與生活常識 (25題) ---
     { cat: "常識", q: "這是一個香港著名的地標，它會發出報時聲，位於尖沙咀。它是？", opt: ["大佛", "鐘樓", "昂坪 360", "海洋公園"], ans: 1, note: "尖沙咀鐘樓。", tips: "測試對香港著名建築的認知。" },
     { cat: "常識", q: "如果你想去大嶼山看大佛，可以乘坐哪種特別的交通工具？", opt: ["電車", "昂坪 360 纜車", "天星小輪", "山頂纜車"], ans: 1, note: "前往天壇大佛的熱門方式。", tips: "地點與交通工具的連結。" },
@@ -462,7 +448,13 @@
     { cat: "常識", q: "香港地鐵的正式名稱是什麼？", opt: ["KCR", "MTR (港鐵)", "Bus", "Tram"], ans: 1, note: "基礎生活縮寫認知。", tips: "公共服務常識。" },
     // (常識類可依此模板繼續生成 10 題...),
 
-// --- 類別：分配邏輯專項 (30題) ---
+// --- 類別：分配邏輯專項 ---
+    { cat: "數學", q: "小麗有 13 粒糖，平均分給 2 個小朋友，最少剩下幾粒？", opt: ["0 粒", "1 粒", "2 粒", "6 粒"], ans: 1, note: "單數分給兩人必剩 1。", tips: "測試奇偶數認知。" },
+    { cat: "數學", q: "老師有 16 塊餅乾，平均分給 4 位同學，每人分得幾塊？", opt: ["2 塊", "4 塊", "6 塊", "8 塊"], ans: 1, note: "4+4+4+4=16。", tips: "平均分配練習。" },
+    { cat: "數學", q: "媽媽買了 10 個橘子，小明和小紅每人吃 4 個，還剩幾個？", opt: ["2 個", "4 個", "6 個", "8 個"], ans: 0, note: "10 - 4 - 4 = 2。", tips: "連續減法應用。" },
+    { cat: "數學", q: "小强有 20 元，想買 3 枝各 6 元的筆，錢夠嗎？還剩幾元？", opt: ["夠，剩 2 元", "夠，剩 4 元", "不夠", "夠，剩 10 元"], ans: 0, note: "3x6=18, 20-18=2。", tips: "兩步計算：乘法加減法。" },
+    { cat: "數學", q: "15 朵花插在 3 個花瓶裡，每個花瓶要一樣多，每瓶有幾朵？", opt: ["3 朵", "4 朵", "5 朵", "6 朵"], ans: 2, note: "15 分成 3 份是 5。", tips: "除法初步概念。" },
+    { cat: "數學", q: "盒子裡有 7 粒巧克力，小明吃了一半（不計餘數），還剩幾粒？", opt: ["3 粒", "4 粒", "5 粒", "2 粒"], ans: 1, note: "7的一半約是3，剩下4（或3）。通常考半數概念。", tips: "測試對「一半」的理解。" },
     { cat: "數學", q: "媽媽有 14 粒草莓，平均分給小紅和小明，每人分到幾粒？", opt: ["6 粒", "7 粒", "8 粒", "14 粒"], ans: 1, note: "14 分兩份：7 + 7 = 14。", tips: "測試基礎平分概念。" },
     { cat: "數學", q: "老師有 15 朵花，每 5 朵插進一個花瓶，需要幾個花瓶？", opt: ["2 個", "3 個", "4 個", "5 個"], ans: 1, note: "15 裡面有 3 個 5。", tips: "測試群組分配。" },
     { cat: "數學", q: "小華有 10 粒糖，分給 3 個小朋友，每人分得 3 粒，最後剩下幾粒？", opt: ["0 粒", "1 粒", "2 粒", "3 粒"], ans: 1, note: "3x3=9, 10-9=1。", tips: "測試餘數概念。" },
