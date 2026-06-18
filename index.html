@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>名校入學題庫測試系統</title>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <style>
         :root { --primary: #4a90e2; --secondary: #f39c12; --success: #27ae60; --danger: #e74c3c; }
         body { font-family: 'PingFang HK', 'Microsoft JhengHei', sans-serif; background: #f5f7fa; margin: 0; display: flex; justify-content: center; padding: 20px; }
@@ -12,18 +13,26 @@
         .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px; }
         .progress-bar { height: 8px; background: #eee; border-radius: 4px; margin-bottom: 20px; overflow: hidden; }
         #progress-inner { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s; }
-        .question-text { font-size: 1.3em; font-weight: bold; color: #2c3e50; margin-bottom: 25px; line-height: 1.5; }
+        .question-text { font-size: 1.3em; font-weight: bold; color: #2c3e50; margin-bottom: 15px; line-height: 1.5; }
         .options-grid { display: grid; gap: 12px; }
         .option { padding: 15px 20px; border: 2px solid #e0e6ed; border-radius: 12px; cursor: pointer; transition: all 0.2s; font-size: 1.1em; }
         .option:hover { background: #f8fbff; border-color: var(--primary); }
         .option.selected { background: #eef5ff; border-color: var(--primary); color: var(--primary); font-weight: bold; }
         .btn-main { width: 100%; padding: 15px; border: none; border-radius: 12px; font-size: 1.1em; font-weight: bold; cursor: pointer; transition: opacity 0.2s; margin-top: 20px; }
-        .btn-main:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-main:disabled { opacity: 0.5; cursor: not-allowed; background: #ccc; }
         .correct-box { background: #e8f5e9; border: 1px solid #c8e6c9; color: #2e7d32; padding: 20px; border-radius: 12px; }
         .wrong-box { background: #ffebee; border: 1px solid #ffcdd2; color: #c62828; padding: 20px; border-radius: 12px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; text-align: left; }
-        th, td { padding: 12px; border-bottom: 1px solid #eee; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; text-align: left; font-size: 0.9em; }
+        th, td { padding: 10px; border-bottom: 1px solid #eee; }
         th { background: #f8f9fa; }
+        
+        /* 拖曳題型的樣式 */
+        .drag-area { min-height: 70px; padding: 15px; background: #f8f9fa; border: 2px dashed #bdc3c7; border-radius: 12px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 15px; }
+        .drag-area.target-area { background: #eef5ff; border-color: var(--primary); min-height: 80px; }
+        .drag-item { padding: 12px 18px; background: white; border: 2px solid var(--primary); border-radius: 8px; cursor: grab; font-size: 1.2em; font-weight: bold; color: var(--primary); box-shadow: 0 4px 6px rgba(0,0,0,0.05); user-select: none; }
+        .drag-item:active { cursor: grabbing; }
+        .sortable-ghost { opacity: 0.4; background: #e0e6ed; }
+        .area-title { font-size: 0.9em; color: #7f8c8d; margin-bottom: 5px; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -44,7 +53,20 @@
             <div id="progress-inner"></div>
         </div>
         <div id="q-text" class="question-text">載入中...</div>
+        
+        <button id="read-btn" class="btn-main" style="background: var(--secondary); color: white; width: auto; padding: 8px 15px; margin-top: 0; margin-bottom: 20px; font-size: 1em; display: inline-flex; align-items: center; gap: 8px;" onclick="readAloud()">
+            🔊 朗讀題目
+        </button>
+
         <div id="options-area" class="options-grid"></div>
+
+        <div id="drag-container" style="display: none;">
+            <div class="area-title">📍 請將詞語拖曳到這裡組成完整的句子：</div>
+            <div id="drag-target" class="drag-area target-area"></div>
+            
+            <div class="area-title" style="margin-top: 15px;">🧩 詞語區（拖拉我）：</div>
+            <div id="drag-source" class="drag-area"></div>
+        </div>
         
         <button id="confirm-btn" class="btn-main" style="background: var(--primary); color: white;" onclick="handleSubmit()" disabled>確認答案</button>
 
@@ -488,40 +510,40 @@
 
 // --- 類別：中文重組句子與語法 (30題) ---
     // 基礎重組：誰 + 做什麼 / 在哪裡 (10題)
-    { cat: "中文", q: "請排列出通順的句子：①唱歌 ②在 ③小鳥 ④樹上", opt: ["③②④①", "④②③①", "①②③④", "③④②①"], ans: 0, note: "小鳥在樹上唱歌。", tips: "測試「人物+地點+動作」的基本結構。" },
-    { cat: "中文", q: "請排列出通順的句子：①弟弟 ②西瓜 ③吃 ④喜歡", opt: ["①④③②", "②③④①", "①②③④", "④③②①"], ans: 0, note: "弟弟喜歡吃西瓜。", tips: "測試助動詞「喜歡」的位置。" },
-    { cat: "中文", q: "請排列出通順的句子：①去 ②我們 ③公園 ④一起", opt: ["②④①③", "③①②④", "①②③④", "④③②①"], ans: 0, note: "我們一起去公園。", tips: "測試副詞「一起」的位置。" },
-    { cat: "中文", q: "請排列出通順的句子：①游水 ②魚兒 ③大海裡 ④在", opt: ["②④③①", "③④②①", "①②③④", "②①③④"], ans: 0, note: "魚兒在大海裡游水。", tips: "地點介詞練習。" },
-    { cat: "中文", q: "請排列出通順的句子：①看書 ②爸爸 ③沙發上 ④坐在", opt: ["②④③①", "③②④①", "①②④③", "④③②①"], ans: 0, note: "爸爸坐在沙發上看書。", tips: "測試動作的先後順序。" },
-    { cat: "中文", q: "請排列出通順的句子：①太陽 ②升起 ③從 ④東方", opt: ["①③④②", "④③②①", "①②③④", "③④①②"], ans: 0, note: "太陽從東方升起。", tips: "自然常識與句式。" },
-    { cat: "中文", q: "請排列出通順的句子：①我的 ②這 ③書包 ④是", opt: ["②④①③", "①③④②", "③④②①", "②①③④"], ans: 0, note: "這是我的書包。", tips: "指示代詞與所有格。" },
-    { cat: "中文", q: "請排列出通順的句子：①漂亮 ②這朵 ③很 ④花", opt: ["②④③①", "①③②④", "④③②①", "③①②④"], ans: 0, note: "這朵花很漂亮。", tips: "形容詞結構。" },
-    { cat: "中文", q: "請排列出通順的句子：①跳舞 ②妹妹 ③跟著 ④音樂", opt: ["②③④①", "④③②①", "①②③④", "③④②①"], ans: 0, note: "妹妹跟著音樂跳舞。", tips: "連貫動作練習。" },
-    { cat: "中文", q: "請排列出通順的句子：①小狗 ②玩耍 ③草地上 ④在", opt: ["①④③②", "③④①②", "②①④③", "①②③④"], ans: 0, note: "小狗在草地上玩耍。", tips: "基礎場景描述。" },
+    { cat: "中文", type: "drag", q: "請拖曳詞語排列出通順的句子：", parts: ["唱歌", "在", "小鳥", "樹上"], ans: [2, 1, 3, 0], note: "小鳥在樹上唱歌。", tips: "測試「人物+地點+動作」的基本結構。" },
+    { cat: "中文", type: "drag", q: "請拖曳詞語排列出通順的句子：", parts: ["弟弟", "西瓜", "吃", "喜歡"], ans: [0, 3, 2, 1], note: "弟弟喜歡吃西瓜。", tips: "測試助動詞「喜歡」的位置。" },
+    { cat: "中文", type: "drag", q: "請拖曳詞語排列出通順的句子：", parts: ["去", "我們", "公園", "一起"], ans: [1, 3, 0, 2], note: "我們一起去公園。", tips: "測試副詞「一起」的位置。" },
+    { cat: "中文", type: "drag", q: "請拖曳詞語排列出通順的句子：", parts: ["游水", "魚兒", "大海裡", "在"], ans: [1, 3, 2, 0], note: "魚兒在大海裡游水。", tips: "地點介詞練習。" },
+    { cat: "中文", type: "drag", q: "請拖曳詞語排列出通順的句子：", parts: ["看書", "爸爸", "沙發上", "坐在"], ans: [1, 3, 2, 0], note: "爸爸坐在沙發上看書。", tips: "測試動作的先後順序。" },
+    { cat: "中文", type: "drag", q: "請拖曳詞語排列出通順的句子：", parts: ["太陽", "升起", "從", "東方"], ans: [0, 2, 3, 1], note: "太陽從東方升起。", tips: "自然常識與句式。" },
+    { cat: "中文", type: "drag", q: "請拖曳詞語排列出通順的句子：", parts: ["我的", "這", "書包", "是"], ans: [1, 3, 0, 2], note: "這是我的書包。", tips: "指示代詞與所有格。" },
+    { cat: "中文", type: "drag", q: "請拖曳詞語排列出通順的句子：", parts: ["漂亮", "這朵", "很", "花"], ans: [1, 3, 2, 0], note: "這朵花很漂亮。", tips: "形容詞結構。" },
+    { cat: "中文", type: "drag", q: "請拖曳詞語排列出通順的句子：", parts: ["跳舞", "妹妹", "跟著", "音樂"], ans: [1, 2, 3, 0], note: "妹妹跟著音樂跳舞。", tips: "連貫動作練習。" },
+    { cat: "中文", type: "drag", q: "請拖曳詞語排列出通順的句子：", parts: ["小狗", "玩耍", "草地上", "在"], ans: [0, 3, 2, 1], note: "小狗在草地上玩耍。", tips: "基礎場景描述。" },
 
     // --- 類別 ：進階重組：加入時間、形容詞或連詞 (10題)
-    { cat: "中文", q: "請排列：①早上 ②上學 ③我 ④背著書包", opt: ["①③④②", "③①②④", "④②③①", "①②③④"], ans: 0, note: "早上我背著書包上學。", tips: "時間狀語通常放在句首或主語後。" },
-    { cat: "中文", q: "請排列：①紅色的 ②有一輛 ③玩具車 ④桌上", opt: ["④②①③", "①③②④", "②①③④", "③②①④"], ans: 0, note: "桌上有一輛紅色的玩具車。", tips: "測試「地點+有+形容詞+名詞」。" },
-    { cat: "中文", q: "請排列：①回家 ②才 ③做完功課 ④我", opt: ["④③②①", "①②③④", "③④②①", "②①③④"], ans: 0, note: "我做完功課才回家。", tips: "測試「才」的邏輯順序。" },
-    { cat: "中文", q: "請排列：①可愛的 ②小貓 ③在 ④睡覺", opt: ["①②③④", "③④①②", "②①③④", "④③②①"], ans: 0, note: "可愛的小貓在睡覺。", tips: "形容詞修飾主語。" },
-    { cat: "中文", q: "請排列：①今天 ②下雨 ③因為 ④沒去公園", opt: ["③①②④", "①②③④", "④③①②", "②①③④"], ans: 0, note: "因為今天下雨，（所以）沒去公園。", tips: "測試因果關係初步邏輯。" },
-    { cat: "中文", q: "請排列：①慢慢地 ②烏龜 ③爬行 ④沙灘上", opt: ["②①④③", "①②③④", "④③②①", "③④①②"], ans: 0, note: "烏龜慢慢地在沙灘上爬行。", tips: "狀態修飾語的位置。" },
-    { cat: "中文", q: "請排列：①香噴噴的 ②媽媽 ③晚飯 ④煮了", opt: ["②④①③", "①③②④", "③①②④", "④③②①"], ans: 0, note: "媽媽煮了香噴噴的晚飯。", tips: "測試「主+動+賓」。" },
-    { cat: "中文", q: "請排列：①美麗的 ②蝴蝶 ③天空中 ④飛舞", opt: ["①②③④", "③④①②", "②①③④", "④③②①"], ans: 0, note: "美麗的蝴蝶在天空中飛舞。", tips: "場景美化句式。" },
-    { cat: "中文", q: "請排列：①五光十色的 ②燈光 ③夜裡 ④有", opt: ["③④①②", "①②③④", "④③①②", "②①③④"], ans: 0, note: "夜裡有五光十色的燈光。", tips: "高階詞彙搭配。" },
-    { cat: "中文", q: "請排列：①聰明的 ②是一個 ③小明 ④孩子", opt: ["③②①④", "①④③②", "②①④③", "④③②①"], ans: 0, note: "小明是一個聰明的孩子。", tips: "測試定語從句。" },
+    { cat: "中文", type: "drag", q: "請拖曳詞語排列出通順的句子：", parts: ["早上", "上學", "我", "背著書包"], ans: [0, 2, 3, 1], note: "早上我背著書包上學。", tips: "時間狀語通常放在句首或主語後。" },
+    { cat: "中文", type: "drag", q: "請拖曳詞語排列出通順的句子：", parts: ["紅色的", "有一輛", "玩具車", "桌上"], ans: [3, 1, 0, 2], note: "桌上有一輛紅色的玩具車。", tips: "測試「地點+有+形容詞+名詞」。" },
+    { cat: "中文", type: "drag", q: "請拖曳詞語排列出通順的句子：", parts: ["回家", "才", "做完功課", "我"], ans: [3, 2, 1, 0], note: "我做完功課才回家。", tips: "測試「才」的邏輯順序。" },
+    { cat: "中文", type: "drag", q: "請拖曳詞語排列出通順的句子：", parts: ["可愛的", "小貓", "在", "睡覺"], ans: [0, 1, 2, 3], note: "可愛的小貓在睡覺。", tips: "形容詞修飾主語。" },
+    { cat: "中文", type: "drag", q: "請拖曳詞語排列出通順的句子：", parts: ["今天", "下雨", "因為", "沒去公園"], ans: [2, 0, 1, 3], note: "因為今天下雨，沒去公園。", tips: "測試因果關係初步邏輯。" },
+    { cat: "中文", type: "drag", q: "請拖曳詞語排列出通順的句子：", parts: ["慢慢地", "烏龜", "爬行", "在沙灘上"], ans: [1, 0, 3, 2], note: "烏龜慢慢地在沙灘上爬行。", tips: "狀態修飾語的位置。" },
+    { cat: "中文", type: "drag", q: "請拖曳詞語排列出通順的句子：", parts: ["香噴噴的", "媽媽", "晚飯", "煮了"], ans: [1, 3, 0, 2], note: "媽媽煮了香噴噴的晚飯。", tips: "測試「主+動+賓」。" },
+    { cat: "中文", type: "drag", q: "請拖曳詞語排列出通順的句子：", parts: ["美麗的", "蝴蝶", "在天空中", "飛舞"], ans: [0, 1, 2, 3], note: "美麗的蝴蝶在天空中飛舞。", tips: "場景美化句式。" },
+    { cat: "中文", type: "drag", q: "請拖曳詞語排列出通順的句子：", parts: ["五光十色的", "燈光", "夜裡", "有"], ans: [2, 3, 0, 1], note: "夜裡有五光十色的燈光。", tips: "高階詞彙搭配。" },
+    { cat: "中文", type: "drag", q: "請拖曳詞語排列出通順的句子：", parts: ["聰明的", "是一個", "小明", "孩子"], ans: [2, 1, 0, 3], note: "小明是一個聰明的孩子。", tips: "測試定語從句。" },
 
     // --- 類別 ：邏輯改錯與語法辨析 (10題)
     { cat: "中文", q: "選出排列最通順的句子：", opt: ["我吃飯喜歡紅色的", "我喜歡吃紅色的蘋果", "紅色的蘋果我吃喜歡", "喜歡我吃紅色的蘋果"], ans: 1, note: "主謂賓完整。", tips: "測試語感。" },
     { cat: "中文", q: "哪句話的意思是正確的？", opt: ["我把書包背在腳上", "我把帽子戴在頭上", "我把鞋子穿在手上", "我把手錶戴在眼上"], ans: 1, note: "常識與動詞搭配。", tips: "測試對穿戴動詞的理解。" },
-    { cat: "中文", q: "「媽媽 煮了 晚餐 辛苦地」。請選出正確順序：", opt: ["媽媽辛苦地煮了晚餐", "晚餐辛苦地煮了媽媽", "辛苦地晚餐煮了媽媽", "媽媽煮了辛苦地晚餐"], ans: 0, note: "形容動作的詞要放在動作前。", tips: "修飾語位置。" },
-    { cat: "中文", q: "「老師 故事 講給 我們 聽」。正確順序是：", opt: ["老師講故事給我們聽", "我們講故事給老師聽", "故事講老師給我們聽", "我們老師講故事聽"], ans: 0, note: "授受動詞結構。", tips: "對話場景邏輯。" },
-    { cat: "中文", q: "「小明 跑步 公園 每天 去」。正確順序是：", opt: ["小明每天去公園跑步", "每天小明跑步去公園", "公園小明每天去跑步", "小明跑步每天去公園"], ans: 0, note: "時間+地點+動作。", tips: "多元素排序。" },
+    { cat: "中文", type: "drag", q: "請拖曳詞語排列出正確的順序：", parts: ["媽媽", "辛苦地", "煮了", "晚餐"], ans: [0, 1, 2, 3], note: "媽媽辛苦地煮了晚餐。", tips: "修飾語位置。" },
+    { cat: "中文", type: "drag", q: "請拖曳詞語排列出正確的順序：", parts: ["老師", "講", "故事", "給", "我們", "聽"], ans: [0, 1, 2, 3, 4, 5], note: "老師講故事給我們聽。", tips: "對話場景邏輯。" },
+    { cat: "中文", type: "drag", q: "請拖曳詞語排列出正確的順序：", parts: ["小明", "每天", "去", "公園", "跑步"], ans: [0, 1, 2, 3, 4], note: "小明每天去公園跑步。", tips: "時間+地點+動作。" },
     { cat: "中文", q: "哪一句說話最有禮貌？", opt: ["喂，給我水！", "我要喝水。", "請給我一杯水，謝謝。", "水，快點！"], ans: 2, note: "面試禮儀與語句完整性。", tips: "社交語法。" },
-    { cat: "中文", q: "「天空 烏雲 滿了 佈」。正確順序是：", opt: ["天空中佈滿了烏雲", "烏雲中佈滿了天空", "佈滿了天空烏雲", "天空中烏雲佈滿了"], ans: 0, note: "佈滿的對象是烏雲。", tips: "動賓搭配。" },
+    { cat: "中文", type: "drag", q: "請拖曳詞語排列出正確的順序：", parts: ["天空中", "佈滿了", "烏雲"], ans: [0, 1, 2], note: "天空中佈滿了烏雲。", tips: "動賓搭配。" },
     { cat: "中文", q: "選出語病：這朵花(  )非常香。", opt: ["開得", "長得", "跑得", "跳得"], ans: 0, note: "花是用「開」的。", tips: "測試動詞準確性。" },
-    { cat: "中文", q: "重組：①洗手 ②吃飯 ③前 ④要", opt: ["②③④①", "①②③④", "①④②③", "②④①③"], ans: 0, note: "吃飯前要洗手。", tips: "生活習慣與邏輯。" },
-    { cat: "中文", q: "重組：①看見 ②一隻 ③我 ④小鳥", opt: ["③①②④", "②④③①", "①②③④", "④③②①"], ans: 0, note: "我看見一隻小鳥。", tips: "基礎感知句式。" },
+    { cat: "中文", type: "drag", q: "請拖曳詞語排列出通順的句子：", parts: ["洗手", "吃飯", "前", "要"], ans: [1, 2, 3, 0], note: "吃飯前要洗手。", tips: "生活習慣與邏輯。" },
+    { cat: "中文", type: "drag", q: "請拖曳詞語排列出通順的句子：", parts: ["看見", "一隻", "我", "小鳥"], ans: [2, 0, 1, 3], note: "我看見一隻小鳥。", tips: "基礎感知句式。" },
 
 
 
@@ -560,7 +582,7 @@
     { cat: "中文", q: "「媽媽買了一(  )新衣服送給我。」", opt: ["條", "件", "個", "張"], ans: 1, note: "衣服用「件」，褲子或裙子用「條」。", tips: "測試量詞分類概念。" },
     { cat: "中文", q: "選出寫法正確的詞語：", opt: ["朋友", "明友", "崩友", "月友"], ans: 0, note: "區分「朋」與「明」。", tips: "形近字是首輪必考題。" },
     { cat: "中文", q: "小明對爸爸說：「我想去公園玩。」這句話是誰說的？", opt: ["爸爸", "小明", "老師", "媽媽"], ans: 1, note: "考查閱讀理解中的角色關係。", tips: "測試對主語的理解。" },
-    { cat: "中文", q: "選出排列通順的句子：①吃飯 ②大家 ③洗手 ④後 ⑤先", opt: ["②⑤③④①", "②⑤①④③", "③④①⑤②", "⑤③④①②"], ans: 0, note: "大家先洗手後吃飯。", tips: "測試動作先後順序邏輯。" },
+    { cat: "中文", type: "drag", q: "請拖曳詞語排列出通順的句子：", parts: ["吃飯", "大家", "洗手", "後", "先"], ans: [1, 4, 2, 3, 0], note: "大家先洗手後吃飯。", tips: "測試動作先後順序邏輯。" },
     { cat: "中文", q: "哪一組詞語是反義詞（意思相反）？", opt: ["美麗/漂亮", "高大/矮小", "快樂/開心", "跳舞/唱歌"], ans: 1, note: "考察對形容詞詞義的理解。", tips: "名校常考相反詞概念。" },
 
     // --- 類別 ：--- English Expansion (Grammar & Vocabulary) ---
@@ -576,7 +598,7 @@
     { cat: "中文", q: "「哥哥正在客廳裡(  )鋼琴。」", opt: ["玩", "彈", "拉", "吹"], ans: 1, note: "動詞搭配。鋼琴用「彈」。", tips: "測試樂器動詞。" },
     { cat: "中文", q: "選出寫法正確的字：", opt: ["放學", "方學", "仿學", "防學"], ans: 0, note: "字形辨析。", tips: "測試基礎生字穩固度。" },
     { cat: "中文", q: "「小紅跑得比小明快，小強跑得比小紅快。」誰跑得最快？", opt: ["小明", "小紅", "小強", "一樣快"], ans: 2, note: "比較邏輯轉換。", tips: "測試閱讀理解與邏輯傳遞。" },
-    { cat: "中文", q: "選出排列通順的句子：①公園 ②去 ③想 ④我 ⑤玩", opt: ["④③②①⑤", "①②③④⑤", "④③⑤②①", "④⑤③②①"], ans: 0, note: "「我想去公園玩」。", tips: "基本句式結構。" },
+    { cat: "中文", type: "drag", q: "請拖曳詞語排列出通順的句子：", parts: ["公園", "去", "想", "我", "玩"], ans: [3, 2, 1, 0, 4], note: "我想去公園玩。", tips: "基本句式結構。" },
     { cat: "中文", q: "「下雨了，媽媽(  )起一把雨傘。」", opt: ["拿", "撐", "提", "背"], ans: 1, note: "動作精準度。雨傘打開用「撐」。", tips: "測試生活化動詞。" },
     { cat: "中文", q: "哪一個字可以加上「木」字旁變成「校」？", opt: ["交", "文", "父", "市"], ans: 0, note: "拆字與合字。", tips: "名校筆試常考部首組合。" },
     { cat: "中文", q: "「看見老師要打招呼。」這是一句：", opt: ["問句", "稱讚", "禮貌的行為", "遊戲規則"], ans: 2, note: "情境認知。", tips: "結合禮儀常識。" },
@@ -639,7 +661,7 @@
     { cat: "中文", q: "選出寫法完全正確的詞語：", opt: ["休息", "休自", "體息", "體自"], ans: 0, note: "辨析「休/體」與「息/自」。", tips: "測試對字形細節的敏感度。" },
     { cat: "中文", q: "「明明(  )着書包去上學。」", opt: ["提", "背", "拿", "抱"], ans: 1, note: "書包通常用「背」(bēi)。", tips: "動作與名詞的精準搭配。" },
     { cat: "中文", q: "哪個字加上「口」字部首後會變成「唱」？", opt: ["昌", "日", "晶", "冒"], ans: 0, note: "字素組合拆解。", tips: "測試對漢字結構的理解。" },
-    { cat: "中文", q: "選出排列通順的句子：①白雲 ②天空 ③飄着 ④朵朵 ⑤中", opt: ["②⑤③④①", "①④③②⑤", "④①③②⑤", "②⑤④①③"], ans: 0, note: "「天空中飄着朵朵白雲」。", tips: "測試方位詞與量詞的位置。" },
+    { cat: "中文", type: "drag", q: "請拖曳詞語排列出通順的句子：", parts: ["白雲", "天空", "飄着", "朵朵", "中"], ans: [1, 4, 2, 3, 0], note: "天空中飄着朵朵白雲。", tips: "測試方位詞與量詞的位置。" },
     { cat: "中文", q: "「春天來了，百花(  )。」", opt: ["開了", "謝了", "散了", "掉了"], ans: 0, note: "季節常識與詞彙搭配。", tips: "基礎文學語感。" },
     { cat: "中文", q: "選出不屬於同類的詞語：", opt: ["西瓜", "南瓜", "木瓜", "哈密瓜"], ans: 1, note: "南瓜是蔬菜類（瓜菜），其他是水果。", tips: "考驗更細緻的分類邏輯。" },
     { cat: "中文", q: "哪一組詞語的意思是【相同】的？", opt: ["容易/簡單", "困難/容易", "快樂/難過", "出現/消失"], ans: 0, note: "近義詞辨析。", tips: "測試詞彙理解深度。" },
@@ -712,7 +734,7 @@
     { cat: "中文", q: "選出寫法正確的字：", opt: ["玩要", "玩耍", "玩西", "玩要"], ans: 1, note: "辨析「耍/要」。", tips: "常見字形陷阱。" },
     { cat: "中文", q: "「我看見一(  )飛機在天上飛。」", opt: ["隻", "條", "架", "部"], ans: 2, note: "交通工具特定量詞。", tips: "擴展量詞詞庫。" },
     { cat: "中文", q: "哪個字的意思與「看」相近？", opt: ["聽", "望", "說", "走"], ans: 1, note: "近義詞概念。", tips: "測試對視覺動詞的認知。" },
-    { cat: "中文", q: "選出排列通順的句子：①好 ②真是 ③這 ④孩子 ⑤個", opt: ["③⑤②①④", "③②①⑤④", "④①②③⑤", "②①③⑤④"], ans: 0, note: "「這張真是一個好孩子」。", tips: "指示代詞與形容詞的順序。" },
+    { cat: "中文", type: "drag", q: "請拖曳詞語排列出通順的句子：", parts: ["好", "真是", "這", "孩子", "個"], ans: [2, 4, 3, 1, 0], note: "這個孩子真是好。", tips: "指示代詞與形容詞的順序。" },
     { cat: "中文", q: "「農夫在田裡(  )種種子。」", opt: ["辛苦地", "快樂地", "飛快地", "大聲地"], ans: 0, note: "情境修飾詞搭配。", tips: "測試對社會職業的認知與語感。" },
     { cat: "中文", q: "哪個字去掉「人」字旁後變成「木」？", opt: ["位", "你", "休", "他"], ans: 2, note: "拆字遊戲。", tips: "測試漢字結構拆解。" },
     { cat: "中文", q: "「小明很(  )禮貌。」", opt: ["有", "友", "又", "右"], ans: 0, note: "同音字辨析。", tips: "基礎語句填充。" },
@@ -781,7 +803,7 @@
     // --- 類別 ：中文題目區
     { cat: "中文", q: "「小明今天穿上乾淨的校服，快快樂樂地去上(  )。」", opt: ["覺", "字", "學", "孝"], ans: 2, note: "考查形近字辨析。", tips: "觀察孩子是否能分辨字的細微差異。" },
     { cat: "中文", q: "魚缸裡有三(  )小魚在游水。", opt: ["隻", "條", "頭", "顆"], ans: 1, note: "精準量詞：細長物體用「條」。", tips: "測試語法精準度。" },
-    { cat: "中文", q: "選出排列通順的句子：①喜歡 ②玩 ③我 ④和 ⑤姐姐 ⑥皮球", opt: ["③①②④⑤⑥", "③④⑤①②⑥", "⑤④③①②⑥", "③①④⑤②⑥"], ans: 1, note: "句子結構邏輯。", tips: "正確為「我和姐姐喜歡玩皮球」。" },
+    { cat: "中文", type: "drag", q: "請拖曳詞語排列出通順的句子：", parts: ["喜歡", "玩", "我", "和", "姐姐", "皮球"], ans: [2, 3, 4, 0, 1, 5], note: "我和姐姐喜歡玩皮球。", tips: "連詞與動賓結構。" },
     { cat: "中文", q: "老師說：「先洗手，然後吃飯，最後收拾。」第一個動作是？", opt: ["吃飯", "洗手", "收拾", "睡覺"], ans: 1, note: "考查「先」的序列。", tips: "聽力指令提取能力。" },
     { cat: "中文", q: "選出寫法正確的詞語：", opt: ["太楊", "太陽", "大陽", "太腸"], ans: 1, note: "形近字辨析。", tips: "細心度測試。" },
     
@@ -860,7 +882,7 @@
         { cat: "邏輯", q: "1, 2, 4, 7, 11, (  )", opt: ["13", "14", "15", "16"], ans: 3, note: "間隔為 +1, +2, +3, +4, 下個是 +5。", tips: "DGJS 數列遞增規律。" },
         { cat: "English", q: "If a bird has wings, a fish has ______.", opt: ["legs", "fins", "arms", "tails"], ans: 1, note: "Bird-Wings; Fish-Fins.", tips: "CKY 類比邏輯。" },
         // --- 類別 ：重組句子
-        { cat: "中文", q: "排列句子：①唱歌 ②在 ③小鳥 ④樹上", opt: ["③②④①", "④②③①", "①②③④", "③④②①"], ans: 0, note: "小鳥在樹上唱歌。", tips: "誰+在哪裡+做什麼。" },
+        { cat: "中文", type: "drag", q: "請拖曳詞語排列出通順的句子：", parts: ["唱歌", "在", "小鳥", "樹上"], ans: [2, 1, 3, 0], note: "小鳥在樹上唱歌。", tips: "測試「人物+地點+動作」的基本結構。" }
         
     ];
 
@@ -869,7 +891,35 @@
     let quizPool = [];
     let currentIdx = 0;
     let currentSelected = null;
-    let userHistory = []; // 新增功能：紀錄作答過程
+    let userHistory = []; 
+    let sortableSource, sortableTarget;
+
+    // --- 載入並緩存語音列表 ---
+    let availableVoices = [];
+    function loadVoices() {
+        if ('speechSynthesis' in window) {
+            availableVoices = window.speechSynthesis.getVoices();
+        }
+    }
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.onvoiceschanged = loadVoices;
+        loadVoices();
+    }
+
+    // --- 獲取最接近活潑 YouTuber (Kalaee) 感覺的語音 ---
+    function getBestVoice(targetLang) {
+        if (availableVoices.length === 0) loadVoices();
+        
+        let langVoices = availableVoices.filter(v => v.lang.replace('_', '-').toLowerCase().includes(targetLang.toLowerCase()));
+        if (langVoices.length === 0) return null;
+
+        // 尋找高質感的系統女聲 (Google, Microsoft Xiaoxiao, Siri 等)
+        let bestVoice = langVoices.find(v => v.name.includes('Xiaoxiao') || v.name.includes('Ting-Ting') || v.name.includes('Mei-Jia') || v.name.includes('Premium'));
+        if (!bestVoice) bestVoice = langVoices.find(v => v.name.includes('Google'));
+        if (!bestVoice) bestVoice = langVoices.find(v => v.name.includes('Siri') || v.name.includes('Microsoft'));
+        
+        return bestVoice || langVoices[0];
+    }
 
     // --- 1. 初始化測驗 ---
     function initQuiz() {
@@ -881,8 +931,11 @@
         userHistory = [];
         currentIdx = 0;
 
-        // 隨機抽取 20 題
-        quizPool = [...questionBank].sort(() => 0.5 - Math.random()).slice(0, 20);
+        // 確保題目中一定包含幾題拖曳題供展示，其餘隨機
+        let dragQuestions = questionBank.filter(q => q.type === "drag").sort(() => 0.5 - Math.random()).slice(0, 5);
+        let normalQuestions = questionBank.filter(q => q.type !== "drag").sort(() => 0.5 - Math.random()).slice(0, 15);
+        quizPool = [...dragQuestions, ...normalQuestions].sort(() => 0.5 - Math.random());
+
         renderQuestion();
     }
 
@@ -890,47 +943,115 @@
     function renderQuestion() {
         currentSelected = null;
         const q = quizPool[currentIdx];
+        const btn = document.getElementById("confirm-btn");
 
-        // 更新 UI
         document.getElementById("q-count").innerText = `題目 ${currentIdx + 1} / 20`;
         document.getElementById("q-cat").innerText = q.cat;
         document.getElementById("q-text").innerText = q.q;
         document.getElementById("progress-inner").style.width = `${((currentIdx + 1) / 20) * 100}%`;
 
-        // 渲染選項
-        const optionsArea = document.getElementById("options-area");
-        optionsArea.innerHTML = "";
-        q.opt.forEach((text, i) => {
-            const div = document.createElement("div");
-            div.className = "option";
-            div.innerText = text;
-            div.onclick = () => {
-                currentSelected = i;
-                document.querySelectorAll(".option").forEach(o => o.classList.remove("selected"));
-                div.classList.add("selected");
-                document.getElementById("confirm-btn").disabled = false;
-            };
-            optionsArea.appendChild(div);
-        });
+        // 判斷題型：拖曳重組 vs 選擇題
+        if (q.type === "drag") {
+            document.getElementById("options-area").style.display = "none";
+            document.getElementById("drag-container").style.display = "block";
+            
+            const sourceArea = document.getElementById("drag-source");
+            const targetArea = document.getElementById("drag-target");
+            sourceArea.innerHTML = "";
+            targetArea.innerHTML = "";
 
-        // 重置區域
-        document.getElementById("confirm-btn").style.display = "block";
-        document.getElementById("confirm-btn").disabled = true;
+            // 打亂詞語順序
+            let shuffledParts = q.parts.map((text, idx) => ({text, idx})).sort(() => 0.5 - Math.random());
+            
+            shuffledParts.forEach(part => {
+                let div = document.createElement("div");
+                div.className = "drag-item";
+                div.innerText = part.text;
+                div.dataset.idx = part.idx; 
+                sourceArea.appendChild(div);
+            });
+
+            // 初始化 SortableJS
+            if(sortableSource) sortableSource.destroy();
+            if(sortableTarget) sortableTarget.destroy();
+
+            sortableSource = new Sortable(sourceArea, {
+                group: 'shared',
+                animation: 150,
+                onEnd: checkDragState
+            });
+            sortableTarget = new Sortable(targetArea, {
+                group: 'shared',
+                animation: 150,
+                onEnd: checkDragState
+            });
+
+            btn.disabled = true; // 需等全部拖完才解鎖
+
+        } else {
+            // 普通選擇題
+            document.getElementById("drag-container").style.display = "none";
+            document.getElementById("options-area").style.display = "grid";
+            
+            const optionsArea = document.getElementById("options-area");
+            optionsArea.innerHTML = "";
+            q.opt.forEach((text, i) => {
+                const div = document.createElement("div");
+                div.className = "option";
+                div.innerText = text;
+                div.onclick = () => {
+                    currentSelected = i;
+                    document.querySelectorAll(".option").forEach(o => o.classList.remove("selected"));
+                    div.classList.add("selected");
+                    btn.disabled = false;
+                };
+                optionsArea.appendChild(div);
+            });
+            btn.disabled = true;
+        }
+
+        btn.style.display = "block";
         document.getElementById("feedback-area").style.display = "none";
+    }
+
+    // 檢查拖曳狀態，決定是否解鎖「確認答案」按鈕
+    function checkDragState() {
+        const source = document.getElementById('drag-source');
+        const btn = document.getElementById('confirm-btn');
+        // 當下方詞語區清空時，代表已排完，解鎖按鈕
+        btn.disabled = (source.children.length !== 0);
     }
 
     // --- 3. 提交答案 ---
     function handleSubmit() {
-        if (currentSelected === null) return;
-
         const q = quizPool[currentIdx];
-        const isCorrect = (currentSelected === q.ans);
+        let isCorrect = false;
+        let userAnsStr = "";
+        let correctAnsStr = "";
 
-        // 【紀錄歷史】
+        if (q.type === "drag") {
+            const targetItems = document.getElementById("drag-target").children;
+            let userOrder = [];
+            for(let item of targetItems) {
+                userOrder.push(parseInt(item.dataset.idx));
+                userAnsStr += item.innerText + " ";
+            }
+            // 檢查陣列是否與答案相符
+            isCorrect = JSON.stringify(userOrder) === JSON.stringify(q.ans);
+            correctAnsStr = q.ans.map(i => q.parts[i]).join(" ");
+            userAnsStr = userAnsStr.trim();
+        } else {
+            if (currentSelected === null) return;
+            isCorrect = (currentSelected === q.ans);
+            userAnsStr = q.opt[currentSelected];
+            correctAnsStr = q.opt[q.ans];
+        }
+
+        // 紀錄歷史
         userHistory.push({
-            question: q.q,
-            userAns: q.opt[currentSelected],
-            correctAns: q.opt[q.ans],
+            question: q.type === "drag" ? q.q + " (" + q.parts.join("、") + ")" : q.q,
+            userAns: userAnsStr,
+            correctAns: correctAnsStr,
             isCorrect: isCorrect
         });
 
@@ -939,7 +1060,7 @@
         // 顯示反饋
         const resBox = document.getElementById("res-box");
         resBox.className = isCorrect ? "correct-box" : "wrong-box";
-        document.getElementById("res-msg").innerHTML = isCorrect ? "<strong>✅ 正確</strong>" : `<strong>❌ 錯誤</strong> (正確答案：${q.opt[q.ans]})`;
+        document.getElementById("res-msg").innerHTML = isCorrect ? "<strong>✅ 答對了！非常棒！</strong>" : `<strong>❌ 哎呀，排錯了</strong><br>正確答案是：<span style="color:#2c3e50; font-weight:bold;">${correctAnsStr}</span>`;
         document.getElementById("res-note").innerHTML = `<strong>解析：</strong>${q.note}<br><strong>💡 建議：</strong>${q.tips}`;
         
         document.getElementById("confirm-btn").style.display = "none";
@@ -948,6 +1069,9 @@
 
     // --- 4. 下一題 ---
     function goNext() {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+        }
         currentIdx++;
         if (currentIdx < 20) {
             renderQuestion();
@@ -964,20 +1088,20 @@
 
         let rank = userScore >= 90 ? "卓越" : (userScore >= 70 ? "良好" : "需努力");
         
-        // 生成回顧表格 HTML
         let tableHtml = `
             <div style="margin-top:30px; text-align:left;">
                 <h3 style="color:var(--primary)">📊 作答紀錄回顧</h3>
                 <table>
                     <thead>
-                        <tr><th>題號</th><th>題目</th><th>結果</th></tr>
+                        <tr><th>題號</th><th>題目</th><th>你的答案</th><th>結果</th></tr>
                     </thead>
                     <tbody>
                         ${userHistory.map((item, i) => `
                             <tr>
                                 <td>${i+1}</td>
-                                <td>${item.question}</td>
-                                <td style="color:${item.isCorrect ? 'green' : 'red'}; font-weight:bold;">
+                                <td style="width: 45%;">${item.question}</td>
+                                <td>${item.userAns}</td>
+                                <td style="color:${item.isCorrect ? 'green' : 'red'}; font-weight:bold; width: 25%;">
                                     ${item.isCorrect ? '✅' : '❌'}<br>
                                     <small style="color:#666; font-weight:normal;">${item.isCorrect ? '' : '正解：'+item.correctAns}</small>
                                 </td>
@@ -997,6 +1121,41 @@
                 ${tableHtml}
             </div>
         `;
+    }
+
+    // --- 語音朗讀功能 ---
+    function readAloud() {
+        if (!('speechSynthesis' in window)) {
+            alert("您的瀏覽器不支援語音朗讀功能。");
+            return;
+        }
+
+        window.speechSynthesis.cancel();
+
+        const q = quizPool[currentIdx];
+        
+        let textToRead = q.q;
+        if(q.type === "drag") {
+            textToRead += " 詞語有：" + q.parts.join("、") + "。";
+        }
+
+        const utterance = new SpeechSynthesisUtterance(textToRead);
+        
+        let targetLang = q.cat === "English" ? "en-US" : "zh-HK";
+        utterance.lang = targetLang;
+        
+        const voice = getBestVoice(q.cat === "English" ? "en" : "zh-HK");
+        if (voice) {
+            utterance.voice = voice;
+        }
+
+        // --- 音調調整：降為 1.05 ---
+        // 語速放慢讓小孩聽得清楚 (0.8)
+        utterance.rate = 0.8; 
+        // 將音調調低至 1.05，保持一點點自然活潑感，但不會太過尖銳刺耳
+        utterance.pitch = 1.05; 
+
+        window.speechSynthesis.speak(utterance);
     }
 </script>
 
